@@ -21,6 +21,66 @@ A* is a pathfinding algorithm that uses heuristics to guide its search. Unlike D
 
 The combination of these costs $\text{f(n)} = \text{g(n)} + \text{h(n)}$ helps A* make "intelligent" decisions about which paths to explore first.
 
+## Core Components
+
+### 1. Cost Functions
+
+- **g(n)**: The actual cost from the start node to the current node
+- **h(n)**: The estimated cost from the current node to the goal (heuristic)
+- **f(n)**: The total estimated cost of the path through node n (f(n) = g(n) + h(n))
+
+### 2. The Heuristic Function
+
+The heuristic function h(n) is what makes A* special. Common heuristics include:
+
+- **Manhattan Distance**: abs(x1 - x2) + abs(y1 - y2)
+- **Euclidean Distance**: √((x1 - x2)² + (y1 - y2)²)
+- **Diagonal Distance**: max(abs(x1 - x2), abs(y1 - y2))
+
+## Algorithm
+
+1. **Initialization**
+   - Set the distance to the origin node, $g[\text{origin}] = 0$.
+   - Set the distance to all other nodes, $g[v] = \infty$ for $v \neq \text{origin}$.
+   - Calculate the heuristic $h[v]$ for all nodes (estimated distance to goal).
+   - Set $f[v] = g[v] + h[v]$ for all nodes.
+   - Add origin node to the open set (priority queue ordered by $f$ values).
+   - Initialize closed set as empty.
+   - Set the parent of each node to `None`.
+
+2. **Select Node**
+   - While the open set is not empty:
+       - Pick the node $u$ from the open set with the smallest $f[u]$ value.
+       - Remove $u$ from the open set and add it to the closed set.
+
+3. **Check Goal**
+   - If $u$ is the goal node:
+       - Reconstruct and return the path using parent pointers.
+
+4. **Update Neighbors**
+   - For each neighbor $v$ of $u$ that is not in the closed set:
+       - Calculate the tentative distance: $g_{\text{tentative}} = g[u] + w(u, v)$.
+       - If $v$ is not in the open set or $g_{\text{tentative}} < g[v]$:
+           - Update $g[v] = g_{\text{tentative}}$.
+           - Update $f[v] = g[v] + h[v]$.
+           - Set the parent of $v$ to $u$.
+           - Add $v$ to the open set (if not already present).
+
+5. **Repeat**
+   - Repeat steps 2–4 until the goal is found or the open set is empty.
+
+The shortest path is reconstructed by tracing the parent pointers from the goal vertex back to the source vertex.
+
+## Performance
+
+**Correctness**
+
+A* is guaranteed to find the optimal path when the heuristic function $h(v)$ is admissible (never overestimates the true distance to the goal).
+
+**Complexity**
+- **Time:** $O(|E| \log |V|)$ using a binary heap, or $O(b^d)$ where $b$ is branching factor and $d$ is solution depth\\
+- **Space:** $O(|V|)$
+
 ## Simple Example
 
 Let's walk through a simple example to see how A* works step by step. We'll use a graph with 7 vertices (A through G) where A is our start vertex and B is our goal vertex.
@@ -93,70 +153,9 @@ Vertex B has the lowest f-value (7.0), so we process it:
 - Add B to the closed set (green)
 - Since B is our goal vertex, we've found the shortest path!
 
-
-## Core Components
-
-### 1. Cost Functions
-
-- **g(n)**: The actual cost from the start node to the current node
-- **h(n)**: The estimated cost from the current node to the goal (heuristic)
-- **f(n)**: The total estimated cost of the path through node n (f(n) = g(n) + h(n))
-
-### 2. The Heuristic Function
-
-The heuristic function h(n) is what makes A* special. Common heuristics include:
-
-- **Manhattan Distance**: abs(x1 - x2) + abs(y1 - y2)
-- **Euclidean Distance**: √((x1 - x2)² + (y1 - y2)²)
-- **Diagonal Distance**: max(abs(x1 - x2), abs(y1 - y2))
-
-## How A* Works
-
-## Algorithm
-
-1. **Initialization**
-   - Set the distance to the origin node, $g[\text{origin}] = 0$.
-   - Set the distance to all other nodes, $g[v] = \infty$ for $v \neq \text{origin}$.
-   - Calculate the heuristic $h[v]$ for all nodes (estimated distance to goal).
-   - Set $f[v] = g[v] + h[v]$ for all nodes.
-   - Add origin node to the open set (priority queue ordered by $f$ values).
-   - Initialize closed set as empty.
-   - Set the parent of each node to `None`.
-
-2. **Select Node**
-   - While the open set is not empty:
-       - Pick the node $u$ from the open set with the smallest $f[u]$ value.
-       - Remove $u$ from the open set and add it to the closed set.
-
-3. **Check Goal**
-   - If $u$ is the goal node:
-       - Reconstruct and return the path using parent pointers.
-
-4. **Update Neighbors**
-   - For each neighbor $v$ of $u$ that is not in the closed set:
-       - Calculate the tentative distance: $g_{\text{tentative}} = g[u] + w(u, v)$.
-       - If $v$ is not in the open set or $g_{\text{tentative}} < g[v]$:
-           - Update $g[v] = g_{\text{tentative}}$.
-           - Update $f[v] = g[v] + h[v]$.
-           - Set the parent of $v$ to $u$.
-           - Add $v$ to the open set (if not already present).
-
-5. **Repeat**
-   - Repeat steps 2–4 until the goal is found or the open set is empty.
-
-The shortest path is reconstructed by tracing the parent pointers from the goal vertex back to the source vertex.
-
-## Performance and Optimizations
-
-[Discussion of performance characteristics and optimization techniques...]
-
 ## Implementation Details
 
-[Code examples and implementation details will be added...]
-
-## Comparison with Other Pathfinding Algorithms
-
-[Comparison with Dijkstra's, Best-First Search, etc...]
+For a full Python implementation of A*, see my [A* Implementation on Github](https://github.com/nramaswamy17/PlannerComparisons/blob/main/algorithms/classical/astar.py).
 
 ## References
 

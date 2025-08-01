@@ -31,16 +31,18 @@ Let's walk through a simple example to see how A* works step by step. We'll use 
 This shows our initial graph with all vertices and edges. The numbers on the edges represent the actual costs between vertices.
 
 ### Step 2: Algorithm Initialization
+
+
 ![A* Initialization](/images/latex/png/astar-step2-init.png)
 
 We start by:
 - Setting g(A) = 0 (distance from start to start is 0)
 - Setting g(v) = ∞ for all other vertices
-- Calculating heuristic values h(v) for all vertices (estimated distance to goal)
-- Setting f(v) = g(v) + h(v) for all vertices
+- Calculating heuristic values h(v) for all vertices
+    - h(A)=7.2, h(B)=0, h(C)=5.4, h(D)=2.2, h(E)=3.6, h(F)=6.3, h(G)=2.8
+- Calculate f(A) = 0 + 7.2 = 7.2
 - Adding A to the open set
 
-The heuristic values shown are: h(A)=7.2, h(B)=0, h(C)=5.4, h(D)=2.2, h(E)=3.6, h(F)=6.3, h(G)=2.8
 
 ### Step 3: Processing Vertex A
 ![A* Process A](/images/latex/png/astar-step3-process-a.png)
@@ -48,7 +50,9 @@ The heuristic values shown are: h(A)=7.2, h(B)=0, h(C)=5.4, h(D)=2.2, h(E)=3.6, 
 We process vertex A (the only vertex in our open set):
 - Add A to the closed set (green)
 - Update neighbors C and F with new g-values
-- Calculate new f-values: f(C) = g(C) + h(C) = 3 + 5.4 = 8.4, f(F) = g(F) + h(F) = 2 + 6.3 = 8.3
+- Calculate new f-values: 
+    - f(C) = g(C) + h(C) = 3 + 5.4 = 8.4
+    - f(F) = g(F) + h(F) = 2 + 6.3 = 8.3
 - Add C and F to the open set
 
 ### Step 4: Processing Vertex F
@@ -57,36 +61,38 @@ We process vertex A (the only vertex in our open set):
 Vertex F has the lowest f-value (8.3), so we process it:
 - Add F to the closed set (green)
 - Update neighbors E and B with new g-values
-- Calculate new f-values for E and B
-- Add E and B to the open set
+- Calculate new f-values for E, B, G, C
+    - If calculated f(C) is < original f(C), update it to the new value. It is also 8.4 so we don't update
+- Add E, B, G to the open set
 
-### Step 5: Processing Vertex C
-![A* Process C](/images/latex/png/astar-step5-process-c.png)
+### Step 5: Finding Vertex B (First Time)
+Goal Node is found but algorithm continues to determine optimality
+
+![A* Process F](/images/latex/png/astar-step4-process-f.png)
+
+### Step 6: Processing Vertex C
+![A* Process C](/images/latex/png/astar-step6-process-c.png)
 
 Vertex C has the lowest f-value, so we process it:
 - Add C to the closed set (green)
 - Update neighbors D and E with new g-values
 - Note that we found a path to B with f-value = 8.0
 
-### Step 6: Processing Vertex E
-![A* Process E](/images/latex/png/astar-step6-process-e.png)
+### Step 7: Processing Vertex E
+![A* Process E](/images/latex/png/astar-step7-process-e.png)
 
 Vertex E has the lowest f-value, so we process it:
 - Add E to the closed set (green)
 - Update neighbor B with a better path (through E)
 - B now has f-value = 7.0 (better than the previous 8.0)
 
-### Step 7: Processing Vertex B
-![A* Process B](/images/latex/png/astar-step7-process-b.png)
+### Step 8: Finding Vertex B (Second Time)
+![A* Process B](/images/latex/png/astar-step8-shortest-path.png)
 
 Vertex B has the lowest f-value (7.0), so we process it:
 - Add B to the closed set (green)
 - Since B is our goal vertex, we've found the shortest path!
 
-### Step 8: Final Path
-![A* Shortest Path](/images/latex/png/astar-step8-shortest-path.png)
-
-The final path from A to B is: A → C → E → B with a total cost of 6.
 
 ## Core Components
 

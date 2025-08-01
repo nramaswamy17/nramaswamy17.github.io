@@ -70,7 +70,7 @@ Skills
 
 Projects
 ======
-* **Audio Classification Device**
+* **Gunshot Classification Device**
   * Developed and trained classification CNN models using Pytorch – Tested LeNet5, ResNet50, and multiple custom models based on varying input shapes (1D vs 2D vector) and input styles (flattened raw audio vs Mel-Frequency Cepstral Coefficients); resulted in 99% accuracy in "ideal" test conditions, and ~20-25% accuracy in noise-heavy conditions (state-of-the-art in noise-heavy conditions is 14% accuracy)
   * Created Python program to label audio files with the location of the signal and to chop the audio file with random quantity of noise leading and lagging the signal, improving model robustness during testing by preventing memorization of signal location in the input array
 

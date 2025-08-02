@@ -100,4 +100,4 @@ A full Python implementation of Dijkstra's algorithm is available in my reposito
 
 Below are example outputs of Dijkstra's algorithm visualized on a grid. The image demonstrates the algorithm navigating around obstacles.
 
-![Dijkstra Demo (With Obstacles)](/assets/images/dijkstra/dijkstra_demo_obstacles.png) 
+![Dijkstra Demo (With Obstacles)](/images/dijkstra_demo_obstacles.png) 

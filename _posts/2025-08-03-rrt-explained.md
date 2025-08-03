@@ -1,5 +1,5 @@
 ---
-title: "RRT: Explained (In-Progress)"
+title: "RRT: Explained (Unfinished)"
 date: 2025-08-03
 permalink: /posts/2025/08/rrt-explained/
 tags:

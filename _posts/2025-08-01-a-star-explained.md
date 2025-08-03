@@ -78,8 +78,8 @@ The shortest path is reconstructed by tracing the parent pointers from the goal 
 A* is guaranteed to find the optimal path when the heuristic function $h(v)$ is admissible (never overestimates the true distance to the goal).
 
 **Complexity**
-- **Time:** $O(|E| \log |V|)$ using a binary heap, or $O(b^d)$ where $b$ is branching factor and $d$ is solution depth\\
-- **Space:** $O(|V|)$
+- **Time:** $O(E log V)$ using a binary heap, or $O(b^d)$ where $b$ is branching factor and $d$ is solution depth\\
+- **Space:** $O(V)$
 
 ## Simple Example
 

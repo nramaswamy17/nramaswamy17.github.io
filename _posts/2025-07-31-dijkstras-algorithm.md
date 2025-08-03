@@ -10,7 +10,7 @@ tags:
 ---
 
 ## Article Goal
-Explain in the most straightforward way how Dijkstra's Algorithm works. This is my first time writing and I figured this would be a fun way to get started!
+Explain in the most straightforward way how Dijkstra's Algorithm works (With cool diagrams!). This is my first time writing and I figured this would be a fun way to get started!
 
 ## Introduction to Dijkstra's Algorithm
 

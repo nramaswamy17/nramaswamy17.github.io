@@ -11,6 +11,7 @@ tags:
 
 ## Article Goal
 Explain in the most straightforward way how A*'s Algorithm works. 
+Diagrams included!
 
 ## What is A*?
 

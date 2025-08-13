@@ -1,0 +1,16 @@
+---
+title: "CBF-QP: Explained"
+date: 2025-08-13
+permalink: /posts/2025/08/cbf-qp-explained/
+tags:
+  - algorithms
+  - safety-control
+  - robotics
+  - control-barriers
+  - optimization
+  - computer-science
+---
+
+## Simple Example
+
+**[CBF-QP: Detailed Mathematical Analysis](/files/CBF-QP.pdf)**

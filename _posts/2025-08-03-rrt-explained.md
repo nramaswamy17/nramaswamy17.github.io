@@ -132,6 +132,10 @@ A full Python implementation of RRT is available in my repository:
 [algorithms/sampling/rrt.py](https://github.com/nramaswamy17/PlannerComparisons/blob/main/algorithms/sampling/rrt.py)
 
 
+## Simple Example
+
+**[RRT: Detailed Mathematical Analysis](/files/RRT.pdf)**
+
 ## References
 
 LaValle, S. M. (1998). Rapidly-exploring random trees: A new tool for path planning. Technical Report 98-11, Computer Science Department, Iowa State University.

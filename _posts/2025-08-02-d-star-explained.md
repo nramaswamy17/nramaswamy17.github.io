@@ -46,6 +46,10 @@ D* classifies each node into one of several states:
 
 Unlike A*'s priority queue, D* uses a priority queue where nodes can have different priority values (k-values) that may not always equal their h-values. This allows for efficient handling of cost changes.
 
+## Simple Example
+
+**[D*: Detailed Mathematical Analysis](/files/Dstar.pdf)**
+
 # References
 
 Stentz, A. (1994). Optimal and Efficient Path Planning for Partially-Known Environments. Proceedings of the IEEE International Conference on Robotics and Automation.

@@ -149,6 +149,10 @@ As more nodes are added, the algorithm continuously finds better paths through t
 A full Python implementation of RRT* is available in my repository:  
 [algorithms/sampling/rrt_star.py](https://github.com/nramaswamy17/PlannerComparisons/blob/main/algorithms/sampling/rrt_star.py)
 
+## Simple Example
+
+**[RRT*: Detailed Mathematical Analysis](/files/RRTstar.pdf)**
+
 ## References
 
 Karaman, S., & Frazzoli, E. (2011). Sampling-based algorithms for optimal motion planning. The International Journal of Robotics Research, 30(7), 846-894.

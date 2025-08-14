@@ -8,11 +8,14 @@ redirect_from:
   - /about.html
 ---
 
-I'm a Computer Science student passionate about artificial intelligence and the mathematical theory behind machine learning systems. My journey into AI has been driven by a desire to understand the fundamental principles that make intelligent systems work.
+I'm a Computer Science student passionate about artificial intelligence and the mathematical theory behind machine learning systems. My journey into AI has been driven by a desire to understand the fundamental principles that make intelligent systems work and drive benefit for humanity.
+
 
 ## Current Projects
 
-For updates on what I'm currently working on, check out my [motion planning section](/motion-planning/), where I share new projects, experiments, and thoughts on AI, machine learning, and related topics.
+For updates on what I'm currently working on, check out my blogs, where I share new projects, experiments, and thoughts on AI.
+- [Motion Blanning Blog](/motion-planning/)
+- [Controls Blog](/controls/)
 
 ## My Path to AI
 
@@ -24,7 +27,7 @@ My professional journey began at Tesla, where I spent several years working in *
 - **Process Optimization**: Leading projects that improved line throughput by up to 41%
 - **Reliability**: Developing predictive maintenance programs for mechanical and electrical equipment to enhance reliability and reduce probabilistic downtime
 
-While I found the technical challenges at Tesla rewarding, I became increasingly fascinated by the mathematical foundations of artificial intelligence. The more I worked with data and automation systems, the more I wanted to understand the theoretical underpinnings of how machines can learn and make intelligent decisions.
+While I found the technical challenges in these roles rewarding, I became increasingly fascinated by the mathematical foundations of artificial intelligence. The more I worked with data and automation systems, the more I wanted to understand the theoretical underpinnings of how machines can learn and make intelligent decisions.
 
 ## Academic Pursuit
 

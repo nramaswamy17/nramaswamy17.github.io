@@ -12,7 +12,7 @@ I'm a Computer Science student passionate about artificial intelligence and the 
 
 ## Current Projects
 
-For updates on what I'm currently working on, check out my [blog section](/year-archive/), where I share new projects, experiments, and thoughts on AI, machine learning, and related topics.
+For updates on what I'm currently working on, check out my [motion planning section](/motion-planning/), where I share new projects, experiments, and thoughts on AI, machine learning, and related topics.
 
 ## My Path to AI
 

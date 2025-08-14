@@ -11,8 +11,6 @@ tags:
   - computer-science
 ---
 
-Admittedly I got kinda stuck on this one so I'll come back to it...
-
 ## Simple Example (WORK IN PROGRESS)
 
 **[Diffusion Policy: Detailed Mathematical Analysis](/files/Diffusion_Policy.pdf)**

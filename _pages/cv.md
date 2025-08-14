@@ -35,7 +35,7 @@ Skills
 * **Machine Learning**: CNN models, LSTM models, audio classification, statistical analysis
 * **Data Engineering**: ETL processes, MySQL, data analysis, forecasting models
 * **Manufacturing**: Statistical Process Control (SPC), Gage R&R studies, OEE metrics, Computer Vision
-* **Life**: Ability to play with any dog
+* **Life**: Dog Petting 
 
 Education
 ======

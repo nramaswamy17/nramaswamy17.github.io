@@ -2,6 +2,7 @@
 title: "FMT*: Explained"
 date: 2025-08-13
 permalink: /posts/2025/08/fmt-star-explained/
+categories: motion-planning
 tags:
   - algorithms
   - path-planning

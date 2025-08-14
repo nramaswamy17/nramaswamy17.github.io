@@ -2,6 +2,7 @@
 title: "Neural RRT*: Explained"
 date: 2025-08-13
 permalink: /posts/2025/08/neural-rrt-star-explained/
+categories: motion-planning
 tags:
   - algorithms
   - path-planning

@@ -2,6 +2,7 @@
 title: "DDP: Explained"
 date: 2025-08-13
 permalink: /posts/2025/08/ddp-explained/
+categories: motion-planning
 tags:
   - algorithms
   - trajectory-optimization

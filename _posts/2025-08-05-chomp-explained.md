@@ -2,6 +2,7 @@
 title: 'CHOMP: Explained'
 date: 2025-08-05
 permalink: /posts/2025/08/chomp-explained/
+categories: motion-planning
 tags:
   - algorithms
   - robotics

@@ -2,6 +2,7 @@
 title: "Dijkstra's Algorithm: Explained"
 date: 2025-07-31
 permalink: /posts/2025/07/dijkstras-algorithm/
+categories: motion-planning
 tags:
   - algorithms
   - graph-theory

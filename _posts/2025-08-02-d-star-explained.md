@@ -2,6 +2,7 @@
 title: 'D*: Explained (Unfinished)'
 date: 2025-08-01
 permalink: /posts/2025/08/d-star-explained/
+categories: motion-planning
 tags:
   - algorithms
   - pathfinding

@@ -11,6 +11,4 @@ tags:
   - computer-science
 ---
 
-## Simple Example
-
-**[MPPI: Detailed Mathematical Analysis](/files/MPPI.pdf)**
+**[MPPI: Simple Example](/files/MPPI.pdf)**

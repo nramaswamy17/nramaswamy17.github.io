@@ -11,6 +11,5 @@ tags:
   - computer-science
 ---
 Admittedly I got kinda stuck on this one so I'll come back to it...
-## Simple Example
 
-**[DDP: Detailed Mathematical Analysis](/files/DDP.pdf)**
+**[DDP: Simple Example](/files/DDP.pdf)**

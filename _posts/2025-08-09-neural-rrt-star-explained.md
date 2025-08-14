@@ -12,6 +12,4 @@ tags:
   - computer-science
 ---
 
-## Simple Example
-
-**[Neural RRT*: Detailed Mathematical Analysis](/files/Neural%20RRT.pdf)**
+**[Neural RRT*: Simple Example](/files/Neural%20RRT.pdf)**

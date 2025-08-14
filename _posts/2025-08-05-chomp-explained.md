@@ -22,6 +22,9 @@ The intuitive explanation for CHOMP is that the objects can be thought of as mag
 
 A straight line vector is made to the target, and the trajectory is warped as necessary to equalize the repulsive efforts from the obstacles in the environment. 
 
+**[CHOMP: Simple Example](/files/CHOMP.pdf)**
+
+
 ## Core Concepts
 
 ### 1. Trajectory Representation
@@ -45,10 +48,6 @@ Where:
 - $F_{obs}(\xi)$ is the obstacle cost
 - $F_{smooth}(\xi)$ is the smoothness cost
 - $\lambda_{obs}$ and $\lambda_{smooth}$ are weighting parameters
-
-## Simple Example
-
-**[CHOMP: Detailed Mathematical Analysis](/files/CHOMP.pdf)**
 
 ## Code Implementation
 See Github

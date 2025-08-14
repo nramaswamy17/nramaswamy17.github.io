@@ -21,6 +21,8 @@ RRT* is an asymptotically optimal variant of the RRT algorithm. While basic RRT 
 
 The key insight of RRT* is that as the tree grows, better paths to existing nodes may be discovered. The algorithm continuously updates these paths, ensuring that the solution converges to the optimal path given enough time.
 
+**[RRT*: Simple Example](/files/RRTstar.pdf)**
+
 ## Core Components
 
 ### 1. Tree Structure (Same as RRT)
@@ -149,10 +151,6 @@ As more nodes are added, the algorithm continuously finds better paths through t
 
 A full Python implementation of RRT* is available in my repository:  
 [algorithms/sampling/rrt_star.py](https://github.com/nramaswamy17/PlannerComparisons/blob/main/algorithms/sampling/rrt_star.py)
-
-## Simple Example
-
-**[RRT*: Detailed Mathematical Analysis](/files/RRTstar.pdf)**
 
 ## References
 

@@ -24,6 +24,8 @@ RRT is particularly effective for:
 - Real-time path planning
 - Non-holonomic constraints
 
+**[RRT: Simple Example](/files/RRT.pdf)**
+
 ## Core Components
 
 ### 1. Tree Structure
@@ -132,10 +134,6 @@ Eventually, a node gets close enough to the goal, and we trace back the path.
 A full Python implementation of RRT is available in my repository:  
 [algorithms/sampling/rrt.py](https://github.com/nramaswamy17/PlannerComparisons/blob/main/algorithms/sampling/rrt.py)
 
-
-## Simple Example
-
-**[RRT: Detailed Mathematical Analysis](/files/RRT.pdf)**
 
 ## References
 

@@ -14,6 +14,10 @@ tags:
 ## Article Goal
 Explain in the most straightforward way how D*'s Algorithm works and why it's essential for dynamic pathfinding.
 
+## Simple Example
+
+**[D*: Simple Example](/files/Dstar.pdf)**
+
 ## What is D*?
 
 D* (Dynamic A*) is a pathfinding algorithm optimized for dynamic environments where obstacles can appear, disappear, or move during navigation. Unlike A*, which assumes a static environment, D* can **efficiently** replan paths when the environment changes. This makes it particularly valuable in robotics and real-world navigation systems.
@@ -46,10 +50,6 @@ D* classifies each node into one of several states:
 ### 3. The OPEN List
 
 Unlike A*'s priority queue, D* uses a priority queue where nodes can have different priority values (k-values) that may not always equal their h-values. This allows for efficient handling of cost changes.
-
-## Simple Example
-
-**[D*: Detailed Mathematical Analysis](/files/Dstar.pdf)**
 
 # References
 

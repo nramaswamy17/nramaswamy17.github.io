@@ -11,6 +11,4 @@ tags:
   - computer-science
 ---
 
-## Simple Example
-
-**[STOMP: Detailed Mathematical Analysis](/files/STOMP.pdf)**
+**[STOMP: Simple Example](/files/STOMP.pdf)**

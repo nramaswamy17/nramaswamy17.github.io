@@ -11,6 +11,5 @@ tags:
   - computer-science
 ---
 
-## Simple Example
 
-**[TrajOpt: Detailed Mathematical Analysis](/files/TrajOpt.pdf)**
+**[TrajOpt: Simple Example](/files/TrajOpt.pdf)**

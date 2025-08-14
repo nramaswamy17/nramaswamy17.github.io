@@ -11,7 +11,4 @@ tags:
   - optimization
   - computer-science
 ---
-
-## Simple Example
-
-**[CBF-QP: Detailed Mathematical Analysis](/files/CBF-QP.pdf)**
+**[CBF-QP: Simple Example](/files/CBF-QP.pdf)**

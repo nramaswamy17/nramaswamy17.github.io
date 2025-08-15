@@ -1,6 +1,6 @@
 ---
 layout: archive
-title: "CV"
+title: "Neal's Resume =)"
 permalink: /cv/
 author_profile: true
 ---
@@ -27,7 +27,7 @@ Projects
 * **Control Algorithms: Theory & Implementation**
   * Implemented and analyzed fundamental control algorithms: ([View Controls Projects](/controls/))
     * Classical Control
-      * Proportional-Integral-Derivative (PID)
+      * Proportional-Integral-Derivative (PID) Control
     * State Estimation (Pending)
       * Kalman Filter 
     * Optimal Control (Pending)

@@ -21,7 +21,7 @@ The key insight is to linearize non-convex constraints (like collision avoidance
 
 TrajOpt starts with an initial trajectory guess and iteratively refines it by solving convex approximations of the original problem, using trust regions to ensure convergence.
 
-**[TrajOpt: Simple Example](/files/TrajOpt.pdf)**
+**[TrajOpt: Written Walkthrough](/files/TrajOpt.pdf)**
 
 
 ## Core Concepts
@@ -80,17 +80,7 @@ Subject to: $||\mathbf{x} - \mathbf{x}^{(k)}||_{\infty} \leq \Delta^{(k)}$
 6. **Check Convergence** - Test for convergence criteria or maximum iterations
 7. **Repeat** - Continue until convergence achieved
 
-## Performance Analysis
 
-### Time Complexity
-- **Per iteration**: O(n³) where n is the number of trajectory variables (dominated by convex solver)
-- **Total**: O(I * n³) where I is number of iterations
-- **Practical**: Often converges in 10-50 iterations
-
-### Space Complexity
-- **Trajectory storage**: O(T * d) where T is time steps, d is robot DOF
-- **Jacobian matrices**: O(C * T * d) where C is number of constraints
-- **Solver workspace**: O(n²) for interior point methods
 
 ## Advantages of TrajOpt
 1. **Fast convergence** due to second-order optimization methods

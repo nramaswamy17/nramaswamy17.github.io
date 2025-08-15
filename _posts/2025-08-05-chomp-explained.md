@@ -22,7 +22,7 @@ The intuitive explanation for CHOMP is that the objects can be thought of as mag
 
 A straight line vector is made to the target, and the trajectory is warped as necessary to equalize the repulsive efforts from the obstacles in the environment. 
 
-**[CHOMP: Simple Example](/files/CHOMP.pdf)**
+**[CHOMP: Written Walkthrough](/files/CHOMP.pdf)**
 
 
 ## Core Concepts
@@ -53,15 +53,7 @@ Where:
 See Github
 
 
-## Performance Analysis
 
-### Time Complexity
-- **Per iteration**: O(n * m) where n is number of waypoints, m is number of obstacles
-- **Total**: O(k * n * m) where k is number of iterations
-
-### Space Complexity
-- **Trajectory storage**: O(n * d) where d is dimensionality
-- **Gradient computation**: O(n * d)
 
 ## Advantages of CHOMP
 

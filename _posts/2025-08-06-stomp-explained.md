@@ -19,7 +19,7 @@ Explain STOMP (Stochastic Trajectory Optimization for Motion Planning)
 
 STOMP starts with an initial trajectory (usually straight line) and generates several noisy variations of the initial trajectory. It evaluates the cost of each rollout, and then combines all the variations, giving higher weight to lower cost options. It then iteratively repeats this process to converge to a smooth and short path. 
 
-**[STOMP: Simple Example](/files/STOMP.pdf)**
+**[STOMP: Written Walkthrough](/files/STOMP.pdf)**
 
 ## Core Concepts
 1. **Trajectory Representation** - STOMP represents trajectories as a sequence of waypoints, using stochastic exploration of the trajectory to find a path.
@@ -74,15 +74,7 @@ Where:
 5. **Update Trajectory** - Combine noisy trajectories using probability-weighted averaging
 6. **Repeat** - Repeat until convergence / max iterations reached
 
-## Performance Analysis
 
-### Time Complexity
-- **Per iteration**: O(K * n * m) where K is number of rollouts, n is waypoints, m is obstacles
-- **Total**: O(I * K * n * m) where I is number of iterations
-
-### Space Complexity
-- **Rollout storage**: O(K * n * d) where d is dimensionality
-- **Cost computation**: O(K)
 
 ## Advantages of STOMP
 1. More resilient to local minima through random noisy injections

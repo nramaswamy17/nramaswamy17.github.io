@@ -21,7 +21,7 @@ RRT* is an asymptotically optimal variant of the RRT algorithm. While basic RRT 
 
 The key insight of RRT* is that as the tree grows, better paths to existing nodes may be discovered. The algorithm continuously updates these paths, ensuring that the solution converges to the optimal path given enough time.
 
-**[RRT*: Simple Example](/files/RRTstar.pdf)**
+**[RRT*: Written Walkthrough](/files/RRTstar.pdf)**
 
 ## Core Components
 

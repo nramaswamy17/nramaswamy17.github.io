@@ -14,10 +14,6 @@ tags:
 ## Article Goal
 Explain in the most straightforward way how D*'s Algorithm works and why it's essential for dynamic pathfinding.
 
-## Simple Example
-
-**[D*: Simple Example](/files/Dstar.pdf)**
-
 ## What is D*?
 
 D* (Dynamic A*) is a pathfinding algorithm optimized for dynamic environments where obstacles can appear, disappear, or move during navigation. Unlike A*, which assumes a static environment, D* can **efficiently** replan paths when the environment changes. This makes it particularly valuable in robotics and real-world navigation systems.
@@ -29,6 +25,8 @@ D* maintains a balance between:
 3. Reusing previous computational work
 
 Contrasting from A*, the D* algorithm searches backwards from the goal to the start and maintains information about previous searches to enable efficient replanning when the environment changes.
+
+**[D*: Written Walkthrough](/files/Dstar.pdf)**
 
 ### 1. State Categories
 

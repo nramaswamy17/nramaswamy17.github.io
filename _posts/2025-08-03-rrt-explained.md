@@ -24,7 +24,7 @@ RRT is particularly effective for:
 - Real-time path planning
 - Non-holonomic constraints
 
-**[RRT: Simple Example](/files/RRT.pdf)**
+**[RRT: Written Walkthrough](/files/RRT.pdf)**
 
 ## Core Components
 

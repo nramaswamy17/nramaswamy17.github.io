@@ -21,7 +21,8 @@ Explain FMT* (Fast Marching Tree) algorithm for optimal motion planning
 
 Unlike RRT* which incrementally samples and builds the tree, FMT* pre-samples all points and then systematically connects them using a heap-based approach similar to Dijkstra's algorithm. This makes FMT* particularly efficient when collision checking is expensive, as it defers collision checks until absolutely necessary.
 
-**[FMT*: Simple Example](/files/FMT.pdf)**
+**[FMT*: Written Walkthrough](/files/FMT.pdf)**
+
 ## Core Concepts
 1. **Batch Sampling** - FMT* pre-samples all points in the configuration space before starting the tree construction process.
 2. **Lazy Dynamic Programming** - Uses a systematic approach to build the tree by expanding nodes in order of their cost-to-come, similar to Dijkstra's algorithm.
@@ -70,17 +71,7 @@ Where $\rho$ is an arbitrarily small positive constant.
 7. **Update Tree** - Add collision-free connections to tree, move nodes to appropriate sets
 8. **Repeat** - Continue until goal is reached or $V_{\text{open}}$ is empty
 
-## Performance Analysis
 
-### Time Complexity
-- **Preprocessing**: O(n log n) for initial sampling and heap setup
-- **Per iteration**: O(k log n) where k is average number of neighbors
-- **Total**: O(n² log n) in worst case, but typically much better due to lazy evaluation
-
-### Space Complexity
-- **Sample storage**: O(n * d) where d is dimensionality
-- **Tree structure**: O(n)
-- **Heap operations**: O(n)
 
 ## Advantages of FMT*
 1. **Asymptotic Optimality** - Guaranteed to converge to optimal solution

@@ -21,7 +21,7 @@ Explain Neural RRT* (Neural Rapidly-exploring Random Tree Star) algorithm for le
 
 The algorithm replaces RRT*'s uniform random sampling with a learned sampling distribution that biases exploration toward regions more likely to contain optimal paths. This neural guidance significantly reduces the time and computational resources needed to find high-quality solutions.
 
-**[Neural RRT*: Simple Example](/files/Neural_RRT.pdf)**
+**[Neural RRT*: Written Walkthrough](/files/Neural_RRT.pdf)**
 
 ## Core Concepts
 1. **Learned Sampling Distribution** - Uses a CNN to predict probability maps that guide where to sample next, replacing uniform random sampling.
@@ -75,22 +75,7 @@ P_{\theta}(\cdot) & \text{with probability } \alpha \\
 7. **Adaptive Sampling** - Optionally update probability distribution as tree grows
 8. **Convergence** - Repeat until goal reached or computational budget exhausted
 
-## Performance Analysis
 
-### Time Complexity
-- **Neural inference**: O(1) per CNN forward pass
-- **Per iteration**: O(log n) for nearest neighbor + O(k) for rewiring, same as RRT*
-- **Training overhead**: O(T) where T is pre-training time (one-time cost)
-
-### Space Complexity
-- **Tree storage**: O(n) where n is number of nodes
-- **CNN model**: O(M) where M is number of network parameters
-- **Probability map**: O(H × W) for discretized environments
-
-### Sample Complexity
-Neural RRT* typically requires significantly fewer samples than traditional RRT*:
-- **Traditional RRT***: O(n^{1+1/d}) samples for convergence in d dimensions
-- **Neural RRT***: O(n^{α+1/d}) where α < 1, faster convergence due to guided sampling
 
 ## Advantages of Neural RRT*
 1. **Faster Convergence** - Reaches near-optimal solutions significantly faster than traditional RRT*

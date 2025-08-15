@@ -12,4 +12,4 @@ tags:
 ---
 Admittedly I got kinda stuck on this one so I'll come back to it...
 
-**[DDP: Simple Example](/files/DDP.pdf)**
+**[DDP: Written Walkthrough](/files/DDP.pdf)**

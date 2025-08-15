@@ -38,13 +38,13 @@ The trajectory optimization problem is formulated as:
 $$\min_{\mathbf{x}} f(\mathbf{x}) + \sum_{i} \lambda_i g_i(\mathbf{x})^2$$
 
 Where:
-- $\mathbf{x} = [x_0, x_1, ..., x_T]$ represents the trajectory (sequence of robot configurations)
-- $f(\mathbf{x})$ is the primary objective (e.g., minimize path length, smoothness)
-- $g_i(\mathbf{x})$ are constraint functions (collision avoidance, joint limits, etc.)
-- $\lambda_i$ are penalty weights
+- $$\mathbf{x} = [x_0, x_1, ..., x_T]$$ represents the trajectory (sequence of robot configurations)
+- $$f(\mathbf{x})$$ is the primary objective (e.g., minimize path length, smoothness)
+- $$g_i(\mathbf{x})$$ are constraint functions (collision avoidance, joint limits, etc.)
+- $$\lambda_i$$ are penalty weights
 
 ### Linearization of Constraints
-For each constraint $g_i(\mathbf{x})$, TrajOpt computes the linear approximation around current estimate $\mathbf{x}^{(k)}$:
+For each constraint $$g_i(\mathbf{x})$$, TrajOpt computes the linear approximation around current estimate $$\mathbf{x}^{(k)}$$:
 
 $$g_i(\mathbf{x}) \approx g_i(\mathbf{x}^{(k)}) + \nabla g_i(\mathbf{x}^{(k)})^T (\mathbf{x} - \mathbf{x}^{(k)})$$
 
@@ -53,7 +53,7 @@ To ensure the linearization remains valid:
 
 $$||\mathbf{x} - \mathbf{x}^{(k)}||_{\infty} \leq \Delta^{(k)}$$
 
-Where $\Delta^{(k)}$ is the trust region radius at iteration $k$.
+Where $$\Delta^{(k)}$$ is the trust region radius at iteration $$k$$.
 
 ### Signed Distance Functions
 For collision avoidance, TrajOpt uses signed distance functions:
@@ -63,13 +63,13 @@ $$d(\mathbf{x}_t) = \min_{p \in \text{obstacles}} ||\text{robot}(\mathbf{x}_t) -
 The collision constraint becomes:
 $$g_{\text{collision}}(\mathbf{x}_t) = \max(0, \epsilon - d(\mathbf{x}_t))$$
 
-Where $\epsilon$ is the minimum safe distance.
+Where $$\epsilon$$ is the minimum safe distance.
 
 ### Sequential Updates
-At each iteration $k$:
+At each iteration $$k$$:
 $$\mathbf{x}^{(k+1)} = \arg\min_{\mathbf{x}} f(\mathbf{x}) + \sum_i \lambda_i [g_i(\mathbf{x}^{(k)}) + \nabla g_i(\mathbf{x}^{(k)})^T (\mathbf{x} - \mathbf{x}^{(k)})]^2$$
 
-Subject to: $||\mathbf{x} - \mathbf{x}^{(k)}||_{\infty} \leq \Delta^{(k)}$
+Subject to: $$||\mathbf{x} - \mathbf{x}^{(k)}||_{\infty} \leq \Delta^{(k)}$$
 
 ## Algorithm Steps
 1. **Initialize** - Start with initial trajectory guess (e.g., straight line interpolation)

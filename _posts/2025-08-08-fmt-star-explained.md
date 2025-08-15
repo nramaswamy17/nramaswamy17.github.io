@@ -36,40 +36,40 @@ $$c(x) = \text{cost-to-come from start to node } x$$
 
 ### Sample Sets
 FMT* partitions samples into three sets:
-- $V_{\text{unvisited}}$: nodes not yet considered
-- $V_{\text{open}}$: nodes in the heap ready for expansion  
-- $V_{\text{closed}}$: nodes already expanded
+- $$V_{\text{unvisited}}$$: nodes not yet considered
+- $$V_{\text{open}}$$: nodes in the heap ready for expansion  
+- $$V_{\text{closed}}$$: nodes already expanded
 
 ### Connection Radius
 $$r_n = \gamma \left(\frac{\log n}{n}\right)^{1/d}$$
 
 Where:
-- $\gamma$ is a problem-dependent constant
-- $n$ is the number of samples
-- $d$ is the dimension of the configuration space
+- $$\gamma$$ is a problem-dependent constant
+- $$n$$ is the number of samples
+- $$d$$ is the dimension of the configuration space
 
 ### Near Neighbor Set
 $$N_r(x) = \{y \in V : \|x - y\| \leq r_n\}$$
 
 ### Tree Update Rule
-For each node $z$ in the open set, FMT* finds the minimum cost connection:
+For each node $$z$$ in the open set, FMT* finds the minimum cost connection:
 $$\text{parent}(z) = \arg\min_{y \in V_{\text{open}} \cap N_r(z)} c(y) + \|y - z\|$$
 
 ### Convergence Rate
 FMT* achieves a convergence rate of:
 $$O(n^{-1/d+\rho})$$
 
-Where $\rho$ is an arbitrarily small positive constant.
+Where $$\rho$$ is an arbitrarily small positive constant.
 
 ## Algorithm Steps
-1. **Initialize** - Sample $n$ points uniformly in the free configuration space
-2. **Setup Sets** - Place start in $V_{\text{open}}$, goal and others in $V_{\text{unvisited}}$ 
-3. **Heap Expansion** - Extract minimum cost node $z$ from $V_{\text{open}}$
-4. **Find Neighbors** - Identify all unvisited neighbors $N_r(z) \cap V_{\text{unvisited}}$
+1. **Initialize** - Sample $$n$$ points uniformly in the free configuration space
+2. **Setup Sets** - Place start in $$V_{\text{open}}$$, goal and others in $$V_{\text{unvisited}}$$ 
+3. **Heap Expansion** - Extract minimum cost node $$z$$ from $$V_{\text{open}}$$
+4. **Find Neighbors** - Identify all unvisited neighbors $$N_r(z) \cap V_{\text{unvisited}}$$
 5. **Lazy Connection** - For each neighbor, check if connection improves cost-to-come
 6. **Collision Check** - Only now perform collision checking for promising connections
 7. **Update Tree** - Add collision-free connections to tree, move nodes to appropriate sets
-8. **Repeat** - Continue until goal is reached or $V_{\text{open}}$ is empty
+8. **Repeat** - Continue until goal is reached or $$V_{\text{open}}$$ is empty
 
 
 

@@ -46,31 +46,31 @@ The key insight of RRT* is that as the tree grows, better paths to existing node
    - Set maximum iterations or time limit
 
 2. **Random Sampling**
-   - Sample a random configuration $q_{\text{rand}}$ in the configuration space
-   - With probability $p_{\text{goal}}$, set $q_{\text{rand}} = q_{\text{goal}}$ (goal bias)
+   - Sample a random configuration $$q_{\text{rand}}$$ in the configuration space
+   - With probability $$p_{\text{goal}}$$, set $$q_{\text{rand}} = q_{\text{goal}}$$ (goal bias)
 
 3. **Nearest Neighbor**
-   - Find the nearest node $q_{\text{near}}$ in the tree to $q_{\text{rand}}$
+   - Find the nearest node $$q_{\text{near}}$$ in the tree to $$q_{\text{rand}}$$
 
 4. **Extend Towards Sample**
-   - Calculate $q_{\text{new}}$ by extending from $q_{\text{near}}$ towards $q_{\text{rand}}$
-   - If the path from $q_{\text{near}}$ to $q_{\text{new}}$ is collision-free:
-       - Add $q_{\text{new}}$ to the tree
+   - Calculate $$q_{\text{new}}$$ by extending from $$q_{\text{near}}$$ towards $$q_{\text{rand}}$$
+   - If the path from $$q_{\text{near}}$$ to $$q_{\text{new}}$$ is collision-free:
+       - Add $$q_{\text{new}}$$ to the tree
 
 5. **Choose Parent**
-   - Find all nodes within radius $r$ of $q_{\text{new}}$
-   - Calculate cost to $q_{\text{new}}$ through each potential parent
-   - Choose the parent that minimizes the cost to $q_{\text{new}}$
+   - Find all nodes within radius $$r$$ of $$q_{\text{new}}$$
+   - Calculate cost to $$q_{\text{new}}$$ through each potential parent
+   - Choose the parent that minimizes the cost to $$q_{\text{new}}$$
 
 6. **Rewire Neighbors**
-   - For each neighbor $q_{\text{neighbor}}$ within radius $r$ of $q_{\text{new}}$:
-       - Calculate cost to $q_{\text{neighbor}}$ through $q_{\text{new}}$
-       - If this cost is less than current cost to $q_{\text{neighbor}}$:
-           - Update parent of $q_{\text{neighbor}}$ to $q_{\text{new}}$
-           - Update cost of $q_{\text{neighbor}}$
+   - For each neighbor $$q_{\text{neighbor}}$$ within radius $$r$$ of $$q_{\text{new}}$$:
+       - Calculate cost to $$q_{\text{neighbor}}$$ through $$q_{\text{new}}$$
+       - If this cost is less than current cost to $$q_{\text{neighbor}}$$:
+           - Update parent of $$q_{\text{neighbor}}$$ to $$q_{\text{new}}$$
+           - Update cost of $$q_{\text{neighbor}}$$
 
 7. **Goal Check**
-   - If $q_{\text{new}}$ is close enough to the goal:
+   - If $$q_{\text{new}}$$ is close enough to the goal:
        - Reconstruct path from goal to start
        - Return the path
 
@@ -88,16 +88,16 @@ Unlike basic RRT, RRT* continuously improves path quality through:
 - **Rewire Neighbors**: Updating existing paths when better options are found
 
 ### Radius Function
-The rewiring radius $r$ is crucial for performance:
+The rewiring radius $$r$$ is crucial for performance:
 - Too small: Limited optimization
 - Too large: High computational cost
-- Typically decreases with tree size: $r = \gamma \left(\frac{\log n}{n}\right)^{1/d}$
+- Typically decreases with tree size: $$r = \gamma \left(\frac{\log n}{n}\right)^{1/d}$$
 
 ## Performance
 
 **Complexity**
-- **Time:** $O(n \log n)$ where $n$ is the number of nodes
-- **Space:** $O(n)$ for storing the tree
+- **Time:** $$O(n \log n)$$ where $$n$$ is the number of nodes
+- **Space:** $$O(n)$$ for storing the tree
 
 **Advantages**
 - Asymptotically optimal

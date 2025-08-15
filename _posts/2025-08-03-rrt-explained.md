@@ -49,20 +49,20 @@ RRT is particularly effective for:
    - Set maximum iterations or time limit
 
 2. **Random Sampling**
-   - Sample a random configuration $q_{\text{rand}}$ in the configuration space
-   - With probability $p_{\text{goal}}$, set $q_{\text{rand}} = q_{\text{goal}}$ (goal bias)
+   - Sample a random configuration $$q_{\text{rand}}$$ in the configuration space
+   - With probability $$p_{\text{goal}}$$, set $$q_{\text{rand}} = q_{\text{goal}}$$ (goal bias)
 
 3. **Nearest Neighbor**
-   - Find the nearest node $q_{\text{near}}$ in the tree to $q_{\text{rand}}$
+   - Find the nearest node $$q_{\text{near}}$$ in the tree to $$q_{\text{rand}}$$
 
 4. **Extend Towards Sample**
-   - Calculate $q_{\text{new}}$ by extending from $q_{\text{near}}$ towards $q_{\text{rand}}$
-   - If the path from $q_{\text{near}}$ to $q_{\text{new}}$ is collision-free:
-       - Add $q_{\text{new}}$ to the tree
-       - Set $q_{\text{near}}$ as parent of $q_{\text{new}}$
+   - Calculate $$q_{\text{new}}$$ by extending from $$q_{\text{near}}$$ towards $$q_{\text{rand}}$$
+   - If the path from $$q_{\text{near}}$$ to $$q_{\text{new}}$$ is collision-free:
+       - Add $$q_{\text{new}}$$ to the tree
+       - Set $$q_{\text{near}}$$ as parent of $$q_{\text{new}}$$
 
 5. **Goal Check**
-   - If $q_{\text{new}}$ is close enough to the goal:
+   - If $$q_{\text{new}}$$ is close enough to the goal:
        - Reconstruct path from goal to start
        - Return the path
 
@@ -88,8 +88,8 @@ The algorithm efficiently explores the configuration space by:
 ## Performance
 
 **Complexity**
-- **Time:** $O(n \log n)$ where $n$ is the number of nodes (with efficient nearest neighbor search)
-- **Space:** $O(n)$ for storing the tree
+- **Time:** $$O(n \log n)$$ where $$n$$ is the number of nodes (with efficient nearest neighbor search)
+- **Space:** $$O(n)$$ for storing the tree
 
 **Advantages**
 - No need for grid discretization

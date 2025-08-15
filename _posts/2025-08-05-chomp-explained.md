@@ -45,9 +45,9 @@ The objective function is given by:
 $$F(\xi) = \lambda_{obs} F_{obs}(\xi) + \lambda_{smooth} F_{smooth}(\xi)$$
 
 Where:
-- $F_{obs}(\xi)$ is the obstacle cost
-- $F_{smooth}(\xi)$ is the smoothness cost
-- $\lambda_{obs}$ and $\lambda_{smooth}$ are weighting parameters
+- $$F_{obs}(\xi)$$ is the obstacle cost
+- $$F_{smooth}(\xi)$$ is the smoothness cost
+- $$\lambda_{obs}$$ and $$\lambda_{smooth}$$ are weighting parameters
 
 ## Code Implementation
 See Github

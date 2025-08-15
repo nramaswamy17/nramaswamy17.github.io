@@ -39,7 +39,7 @@ $$x_{\text{rand}} \sim \text{Uniform}(\mathcal{X}_{\text{free}})$$
 Neural RRT* uses a learned probability distribution:
 $$x_{\text{rand}} \sim P_{\theta}(x | \text{map}, x_{\text{start}}, x_{\text{goal}})$$
 
-Where $P_{\theta}$ is the CNN-predicted probability distribution parameterized by $\theta$.
+Where $$P_{\theta}$$ is the CNN-predicted probability distribution parameterized by $$\theta$$.
 
 ### CNN Architecture
 The neural network takes as input:
@@ -56,7 +56,7 @@ $$P_{\text{norm}}(x,y) = \frac{P_{\theta}(x,y)}{\sum_{i,j} P_{\theta}(i,j)}$$
 The CNN is typically trained using successful paths from A* or other optimal planners:
 $$\mathcal{L} = -\sum_{i=1}^{N} \sum_{(x,y) \in \text{path}_i} \log P_{\theta}(x,y | \text{map}_i, s_i, g_i)$$
 
-Where $N$ is the number of training examples and $\text{path}_i$ represents ground truth optimal paths.
+Where $$N$$ is the number of training examples and $$\text{path}_i$$ represents ground truth optimal paths.
 
 ### Hybrid Sampling Strategy
 Neural RRT* often uses a mixture of learned and uniform sampling:

@@ -33,38 +33,38 @@ STOMP starts with an initial trajectory (usually straight line) and generates se
 $$S(τ_i) = S_{obs}(τ_i) + S_{smooth}(τ_i) + S_{goal}(τ_i)$$
 
 Where:
-- $S_{obs}(τ_i)$ is the obstacle/collision cost
-- $S_{smooth}(τ_i)$ is the smoothness cost (penalizes jerky motion)
-- $S_{goal}(τ_i)$ is the goal reaching cost
+- $$S_{obs}(τ_i)$$ is the obstacle/collision cost
+- $$S_{smooth}(τ_i)$$ is the smoothness cost (penalizes jerky motion)
+- $$S_{goal}(τ_i)$$ is the goal reaching cost
 
 ### Noisy Trajectory Generation
 $$τ_i = \theta_k + \epsilon_i$$
 
-Where $\epsilon_i$ is typically sampled from a multivariate Gaussian distribution:
+Where $$\epsilon_i$$ is typically sampled from a multivariate Gaussian distribution:
 
 $$\epsilon_i \sim \mathcal{N}(0, \Sigma)$$
 
-With $\Sigma$ being the covariance matrix that controls the noise characteristics.
+With $$\Sigma$$ being the covariance matrix that controls the noise characteristics.
 
 ### Core Update Equation
 $$\theta_{k+1} = \theta_k + \sum_{i=1}^{K} P(τ_i) \epsilon_i$$
 
 Where:
-- $\theta_k$ is the current trajectory parameters at iteration $k$
-- $\theta_{k+1}$ is the updated trajectory parameters
-- $K$ is the number of rollouts
-- $τ_i$ are the rollout trajectories
-- $\epsilon_i$ are the noise perturbations added to generate rollout $i$
-- $P(τ_i)$ are probability weights based on trajectory costs
+- $$\theta_k$$ is the current trajectory parameters at iteration $$k$$
+- $$\theta_{k+1}$$ is the updated trajectory parameters
+- $$K$$ is the number of rollouts
+- $$τ_i$$ are the rollout trajectories
+- $$\epsilon_i$$ are the noise perturbations added to generate rollout $$i$$
+- $$P(τ_i)$$ are probability weights based on trajectory costs
 
 ### Probability Weight Computation
 $$P(τ_i) = \frac{\exp(-h \cdot S(τ_i))}{\sum_{j=1}^{K} \exp(-h \cdot S(τ_j))}$$
 
 Where:
-- $S(τ_i)$ is the total cost of rollout trajectory $i$
-- $h$ is a temperature parameter controlling exploration vs exploitation
-- Higher $h$ values lead to more exploitation (focus on low-cost rollouts)
-- Lower $h$ values lead to more exploration (more uniform weighting)
+- $$S(τ_i)$$ is the total cost of rollout trajectory $$i$$
+- $$h$$ is a temperature parameter controlling exploration vs exploitation
+- Higher $$h$$ values lead to more exploitation (focus on low-cost rollouts)
+- Lower $$h$$ values lead to more exploration (more uniform weighting)
 
 ## Algorithm Steps
 1. **Initialize** - Start with initial trajectory

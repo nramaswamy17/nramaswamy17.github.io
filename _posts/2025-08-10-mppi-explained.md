@@ -34,32 +34,32 @@ Unlike traditional gradient-based MPC methods, MPPI is derivative-free and can h
 Consider a discrete-time stochastic system:
 $$x_{t+1} = f(x_t, u_t) + w_t$$
 
-Where $w_t$ represents system noise or disturbances.
+Where $$w_t$$ represents system noise or disturbances.
 
 ### Cost Function
 The total cost for a trajectory is:
 $$S(\tau) = \phi(x_T) + \sum_{t=0}^{T-1} q(x_t, u_t)$$
 
 Where:
-- $\phi(x_T)$ is the terminal cost
-- $q(x_t, u_t)$ is the running cost
-- $\tau$ represents a complete trajectory
+- $$\phi(x_T)$$ is the terminal cost
+- $$q(x_t, u_t)$$ is the running cost
+- $$\tau$$ represents a complete trajectory
 
 ### Control Perturbations
 MPPI generates control sequences by adding noise to a nominal control:
 $$u_t^{(i)} = \bar{u}_t + \epsilon_t^{(i)}$$
 
 Where:
-- $\bar{u}_t$ is the nominal control at time $t$
-- $\epsilon_t^{(i)} \sim \mathcal{N}(0, \Sigma)$ is sampled noise for rollout $i$
+- $$\bar{u}_t$$ is the nominal control at time $$t$$
+- $$\epsilon_t^{(i)} \sim \mathcal{N}(0, \Sigma)$$ is sampled noise for rollout $$i$$
 
 ### Importance Weights
 The weight for each trajectory is computed using:
 $$w^{(i)} = \frac{\exp(-\frac{1}{\lambda} S(\tau^{(i)}))}{\sum_{j=1}^{K} \exp(-\frac{1}{\lambda} S(\tau^{(j)}))}$$
 
 Where:
-- $\lambda$ is the temperature parameter controlling exploration vs. exploitation
-- $K$ is the total number of rollouts
+- $$\lambda$$ is the temperature parameter controlling exploration vs. exploitation
+- $$K$$ is the total number of rollouts
 - Lower costs result in higher weights
 
 ### Control Update
@@ -73,13 +73,13 @@ $$u_t^* = \bar{u}_t + \frac{\int \epsilon_t \exp(-\frac{1}{\lambda} S(\tau)) d\t
 Which MPPI approximates through Monte Carlo sampling.
 
 ## Algorithm Steps
-1. **Initialize** - Set nominal control sequence $\bar{u}_0, \bar{u}_1, ..., \bar{u}_{T-1}$
-2. **Sample Rollouts** - Generate $K$ control sequences by adding Gaussian noise: $u_t^{(i)} = \bar{u}_t + \epsilon_t^{(i)}$
-3. **Forward Simulation** - For each rollout, simulate system dynamics to get trajectory $\tau^{(i)}$
-4. **Cost Evaluation** - Compute cost $S(\tau^{(i)})$ for each trajectory
-5. **Compute Weights** - Calculate importance weights $w^{(i)}$ based on trajectory costs
-6. **Update Control** - Compute weighted average: $u_0^* = \bar{u}_0 + \sum_{i=1}^{K} w^{(i)} \epsilon_0^{(i)}$
-7. **Apply Control** - Execute $u_0^*$ and shift time horizon forward
+1. **Initialize** - Set nominal control sequence $$\bar{u}_0, \bar{u}_1, ..., \bar{u}_{T-1}$$
+2. **Sample Rollouts** - Generate $$K$$ control sequences by adding Gaussian noise: $$u_t^{(i)} = \bar{u}_t + \epsilon_t^{(i)}$$
+3. **Forward Simulation** - For each rollout, simulate system dynamics to get trajectory $$\tau^{(i)}$$
+4. **Cost Evaluation** - Compute cost $$S(\tau^{(i)})$$ for each trajectory
+5. **Compute Weights** - Calculate importance weights $$w^{(i)}$$ based on trajectory costs
+6. **Update Control** - Compute weighted average: $$u_0^* = \bar{u}_0 + \sum_{i=1}^{K} w^{(i)} \epsilon_0^{(i)}$$
+7. **Apply Control** - Execute $$u_0^*$$ and shift time horizon forward
 8. **Repeat** - Update nominal sequence and repeat for next time step
 
 

@@ -1,5 +1,5 @@
 ---
-title: "MPPI: Explained"
+title: "Model Predictive Path Integral (MPPI)"
 date: 2025-08-13
 permalink: /posts/2025/08/mppi-explained/
 categories: motion-planning

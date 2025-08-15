@@ -1,5 +1,5 @@
 ---
-title: "Neural RRT*: Explained"
+title: "Neural RRT*"
 date: 2025-08-13
 permalink: /posts/2025/08/neural-rrt-star-explained/
 categories: motion-planning

@@ -1,5 +1,5 @@
 ---
-title: "CBF-QP: Explained"
+title: "Control Barrier Function Quadratic Programming (CBF-QP)"
 date: 2025-08-13
 published: false
 permalink: /posts/2025/08/cbf-qp-explained/

@@ -1,5 +1,5 @@
 ---
-title: 'A*: Explained'
+title: 'A*'
 date: 2025-08-01
 permalink: /posts/2025/08/a-star-explained/
 categories: motion-planning

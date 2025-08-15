@@ -1,5 +1,5 @@
 ---
-title: "RRT: Explained (Unfinished)"
+title: "RRT (Unfinished)"
 date: 2025-08-03
 permalink: /posts/2025/08/rrt-explained/
 categories: motion-planning

@@ -1,5 +1,5 @@
 ---
-title: "TrajOpt: Explained"
+title: "Trajectory Optimization (TrajOpt)"
 date: 2025-08-13
 permalink: /posts/2025/08/trajopt-explained/
 categories: motion-planning

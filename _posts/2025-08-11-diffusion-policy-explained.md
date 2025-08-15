@@ -1,5 +1,5 @@
 ---
-title: "Diffusion Policy: Explained"
+title: "Diffusion Policy"
 date: 2025-08-13
 permalink: /posts/2025/08/diffusion-policy-explained/
 categories: motion-planning

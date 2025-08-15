@@ -1,5 +1,5 @@
 ---
-title: "FMT*: Explained"
+title: "Fast Marching Trees (FMT*)"
 date: 2025-08-13
 permalink: /posts/2025/08/fmt-star-explained/
 categories: motion-planning

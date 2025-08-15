@@ -1,5 +1,5 @@
 ---
-title: 'D*: Explained (Unfinished)'
+title: 'D* (Unfinished)'
 date: 2025-08-01
 permalink: /posts/2025/08/d-star-explained/
 categories: motion-planning

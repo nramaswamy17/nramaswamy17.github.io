@@ -1,5 +1,5 @@
 ---
-title: "Stochastic Trajectory Optimization for Motion Planning (STOMP): Explained"
+title: "Stochastic Trajectory Optimization for Motion Planning (STOMP)"
 date: 2025-08-13
 permalink: /posts/2025/08/stomp-explained/
 categories: motion-planning

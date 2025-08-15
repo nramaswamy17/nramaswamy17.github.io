@@ -1,5 +1,5 @@
 ---
-title: "DDP: Explained"
+title: "Differential Dynamic Programming (DDP)"
 date: 2025-08-13
 permalink: /posts/2025/08/ddp-explained/
 categories: motion-planning

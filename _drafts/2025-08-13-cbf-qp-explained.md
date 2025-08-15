@@ -1,6 +1,7 @@
 ---
 title: "CBF-QP: Explained"
 date: 2025-08-13
+published: false
 permalink: /posts/2025/08/cbf-qp-explained/
 categories: motion-planning
 tags:
@@ -17,11 +18,9 @@ tags:
 Explain CBF-QP (Control Barrier Function Quadratic Programming) for safety-critical control systems
 
 ## What is CBF-QP?
-**CBF-QP** is a control methodology that unifies Control Barrier Functions (CBFs) with Control Lyapunov Functions (CLFs) through quadratic programming to ensure safety while achieving performance objectives. CBF-QP provides formal safety guarantees by constraining control inputs to maintain forward invariance of safe sets, while simultaneously optimizing for desired system performance.
+**CBF-QP** is a control methodology that unifies Control Barrier Functions (CBFs) with Control Lyapunov Functions (CLFs) through quadratic programming (QP) to ensure safety while achieving performance objectives. CBF-QP provides formal safety guarantees by constraining control inputs to maintain forward invariance of safe sets, while simultaneously optimizing for desired system performance.
 
-The approach formulates safety constraints as inequality constraints in a quadratic program, where CBFs provide certificates that the system will remain safe (within desired constraints) while CLFs ensure convergence to control objectives. This enables real-time optimization-based control with mathematical safety guarantees.
-
-**[CBF-QP: Written Walkthrough](/files/CBF-QP.pdf)**
+**[CBF-QP: Written Walkthrough (In Progress)](/files/CBF-QP.pdf)**
 
 ## Core Concepts
 1. **Forward Set Invariance** - Ensures the system remains within a safe set for all future time
@@ -32,22 +31,22 @@ The approach formulates safety constraints as inequality constraints in a quadra
 ## The Math
 
 ### Safe Set Definition
-Define a safe set $\mathcal{C}$ as:
+Define a safe set $$\mathcal{C}$$ as:
 $$\mathcal{C} = \{x \in \mathbb{R}^n : h(x) \geq 0\}$$
 
-Where $h(x)$ is a continuously differentiable function defining the boundary of the safe region.
+Where $$h(x)$$ is a continuously differentiable function defining the boundary of the safe region.
 
 ### Control Barrier Function
-A function $h(x)$ is a Control Barrier Function if there exists a class $\mathcal{K}$ function $\alpha$ such that:
+A function $$h(x)$$ is a Control Barrier Function if there exists a class $$\mathcal{K}$$ function $\alpha$ such that:
 $$\sup_{u \in U} \left[ L_f h(x) + L_g h(x) u \right] \geq -\alpha(h(x))$$
 
 Where:
-- $L_f h(x) = \nabla h(x) \cdot f(x)$ is the Lie derivative of $h$ along $f$
-- $L_g h(x) = \nabla h(x) \cdot g(x)$ is the Lie derivative of $h$ along $g$
-- $\dot{x} = f(x) + g(x)u$ is the control-affine system
+- $$L_f h(x) = \nabla h(x) \cdot f(x)$$ is the Lie derivative of $h$ along $f$
+- $$L_g h(x) = \nabla h(x) \cdot g(x)$$ is the Lie derivative of $h$ along $g$
+- $$\dot{x} = f(x) + g(x)u$$ is the control-affine system
 
 ### Control Lyapunov Function
-A function $V(x)$ is a Control Lyapunov Function if there exists class $\mathcal{K}$ functions $\alpha_1, \alpha_2, \alpha_3$ such that:
+A function $$V(x)$$ is a Control Lyapunov Function if there exists class $$\mathcal{K}$$ functions $$\alpha_1, \alpha_2, \alpha_3$$ such that:
 $$\alpha_1(\|x\|) \leq V(x) \leq \alpha_2(\|x\|)$$
 
 And for all $x \neq 0$:
@@ -63,13 +62,13 @@ u^* = \arg\min_{u,\delta} \quad & \|u - u_{\text{des}}(x)\|^2 + p\delta^2 \\
 \end{align}$$
 
 Where:
-- $u_{\text{des}}(x)$ is the desired control input
-- $\delta$ is a relaxation variable for CLF constraint
-- $p > 0$ is a penalty weight
-- $\gamma$ is a class $\mathcal{K}$ function
+- $$u_{\text{des}}(x)$$ is the desired control input
+- $$\delta$$ is a relaxation variable for CLF constraint
+- $$p > 0$$ is a penalty weight
+- $$\gamma$$ is a class $$\mathcal{K}$$ function
 
 ### Safety Guarantee
-If $h(x_0) \geq 0$ and the CBF constraint is satisfied, then:
+If $$h(x_0) \geq 0$$ and the CBF constraint is satisfied, then:
 $$h(x(t)) \geq 0 \quad \forall t \geq 0$$
 
 This ensures the system remains in the safe set $\mathcal{C}$ for all time.
@@ -82,14 +81,14 @@ The constraint becomes:
 $$L_f \psi_{r-1}(x) + L_g \psi_{r-1}(x) u \geq -\alpha_r(\psi_{r-1}(x))$$
 
 ## Algorithm Steps
-1. **Define Safe Set** - Specify safety constraints through function $h(x) \geq 0$
-2. **Construct CBF** - Verify $h(x)$ satisfies CBF conditions or design appropriate $h(x)$
-3. **Design CLF** - Choose Lyapunov function $V(x)$ for desired performance objective
+1. **Define Safe Set** - Specify safety constraints through function $$h(x) \geq 0$$
+2. **Construct CBF** - Verify $$h(x)$$ satisfies CBF conditions or design appropriate $$h(x)$$
+3. **Design CLF** - Choose Lyapunov function $$V(x)$$ for desired performance objective
 4. **Formulate QP** - Set up quadratic program with CBF and CLF constraints
-5. **Solve Online** - At each time step, solve QP to get optimal control $u^*$
-6. **Apply Control** - Execute computed control input $u^*$
+5. **Solve Online** - At each time step, solve QP to get optimal control $$u^*$$
+6. **Apply Control** - Execute computed control input $$u^*$$
 7. **Update State** - Measure new state and repeat
-8. **Monitor Safety** - Verify $h(x) \geq 0$ is maintained throughout execution
+8. **Monitor Safety** - Verify $$h(x) \geq 0$$ is maintained throughout execution
 
 
 

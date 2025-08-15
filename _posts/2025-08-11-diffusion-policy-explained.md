@@ -17,7 +17,7 @@ tags:
 Explain Diffusion Policy algorithm for visuomotor policy learning in robotics
 
 ## What is Diffusion Policy?
-**Diffusion Policy** is a novel approach to robot behavior generation that represents visuomotor policies as conditional denoising diffusion processes. Instead of directly predicting actions from observations, Diffusion Policy learns to gradually denoise random noise into coherent action sequences, conditioned on visual observations and robot states.
+**Diffusion Policy** is an approach to robot behavior generation that represents policies as conditional denoising diffusion processes. Instead of directly predicting actions from observations, Diffusion Policy learns to gradually denoise random noise into coherent action sequences, conditioned on visual observations and robot states.
 
 The key insight is that action generation can be framed as a generative modeling problem, where the policy learns the distribution of expert actions and samples from this learned distribution during execution. This approach naturally handles multimodal behaviors and avoids the mode collapse issues that plague traditional behavior cloning methods.
 

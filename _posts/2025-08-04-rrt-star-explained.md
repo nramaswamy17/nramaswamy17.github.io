@@ -1,5 +1,5 @@
 ---
-title: "RRT* (Unfinished)"
+title: "RRT*"
 date: 2025-08-04
 permalink: /posts/2025/08/rrt-star-explained/
 categories: motion-planning
@@ -150,7 +150,7 @@ As more nodes are added, the algorithm continuously finds better paths through t
 ## Python Implementation
 
 A full Python implementation of RRT* is available in my repository:  
-[algorithms/sampling/rrt_star.py](https://github.com/nramaswamy17/PlannerComparisons/blob/main/algorithms/sampling/rrt_star.py)
+[algorithms/sampling/rrt_star.py](https://github.com/nramaswamy17/PlannerComparisons/blob/main/algorithms/sampling/rrtstar.py)
 
 ## References
 

@@ -33,9 +33,9 @@ The error signal is the difference between setpoint and process variable:
 $$e(t) = SP(t) - PV(t)$$
 
 Where:
-- $e(t)$ is the error at time $$t$$
-- $SP(t)$ is the setpoint (desired value)
-- $PV(t)$ is the process variable (measured value)
+- $$e(t)$$ is the error at time $$t$$
+- $$SP(t)$$ is the setpoint (desired value)
+- $$PV(t)$$ is the process variable (measured value)
 
 ### PID Control Equation
 The control output combines three terms:

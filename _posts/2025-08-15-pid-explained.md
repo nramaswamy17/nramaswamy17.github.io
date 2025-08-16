@@ -42,18 +42,18 @@ The control output combines three terms:
 $$u(t) = K_p e(t) + K_i \int_0^t e(\tau) d\tau + K_d \frac{de(t)}{dt}$$
 
 Where:
-- $u(t)$ is the control output
-- $K_p$ is the proportional gain
-- $K_i$ is the integral gain  
-- $K_d$ is the derivative gain
+- $$u(t)$$ is the control output
+- $$K_p$$ is the proportional gain
+- $$K_i$$ is the integral gain  
+- $$K_d$$ is the derivative gain
 
 ### Discrete-Time Implementation
 For digital systems, the continuous equation becomes:
 $$u[n] = K_p e[n] + K_i \sum_{k=0}^{n} e[k] \Delta t + K_d \frac{e[n] - e[n-1]}{\Delta t}$$
 
 Where:
-- $n$ is the current sample
-- $\Delta t$ is the sampling period
+- $$n$$ is the current sample
+- $$\Delta t$$ is the sampling period
 
 ### Transfer Function
 In the Laplace domain, the PID controller has the transfer function:

@@ -52,7 +52,7 @@ Skills
 
 Education
 ======
-* M.S. Computer Science & Engineering, University of Nevada, Reno, GPA 4.00 (Expected May 2026)
+* M.S. Computer Science & Engineering, University of Nevada, Reno, GPA 4.00 (Est. Aug 2026)
 * B.S. Industrial and Systems Engineering, Rensselaer Polytechnic Institute, GPA 3.56 (Dec 2021)
 
 Work Experience

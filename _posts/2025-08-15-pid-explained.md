@@ -20,6 +20,8 @@ Explain PID Control algorithm for feedback control systems in robotics and autom
 
 The key insight is that effective control requires responding to current error (proportional), accumulated past error (integral), and predicted future error (derivative). This three-term combination provides robust control for a wide variety of systems while remaining computationally simple and intuitive to tune.
 
+**[PID Control: Written Walkthrough](/files/PID.pdf)**
+
 ## Core Concepts
 1. **Proportional Control (P)** - Responds proportionally to the current error magnitude
 2. **Integral Control (I)** - Eliminates steady-state error by accumulating past errors

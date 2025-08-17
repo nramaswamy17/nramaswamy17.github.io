@@ -14,10 +14,10 @@ tags:
 
 
 ## Article Goal
-Explain the Kalman Filter algorithm for optimal state estimation in noisy dynamic systems
+Explain the Kalman Filter algorithm for optimal state estimation in "noisy" dynamic systems
 
 ## What is the Kalman Filter?
-The **Kalman Filter** is an optimal recursive algorithm that estimates the true state of a dynamic system from a series of noisy measurements. It operates by continuously predicting the system state forward in time, then updating these predictions when new measurements become available.
+The **Kalman Filter** is an optimal recursive algorithm that estimates the true state of a dynamic system from a series of noisy measurements. It operates by continuously predicting the system state forward in time, then updating these predictions as new measurements become available.
 
 The key insight is that optimal estimation requires balancing two sources of information: predictions based on system models and observations from sensors. The filter automatically weighs these sources based on their respective uncertainties, trusting more reliable information more heavily. This approach provides the mathematically optimal estimate under assumptions of linear dynamics and Gaussian noise.
 

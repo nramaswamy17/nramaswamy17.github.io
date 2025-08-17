@@ -30,7 +30,7 @@ Projects
   * Implemented and analyzed fundamental control algorithms: ([View Controls Projects](/controls/))
     * Classical Control
       * Proportional-Integral-Derivative (PID) Control
-    * State Estimation (Pending)
+    * State Estimation
       * Kalman Filter 
     * Optimal Control (Pending)
       * Linear Quadratic Regulator (LQR), Iterative Linear Quadratic Regulator (iLQR) 

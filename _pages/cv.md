@@ -1,6 +1,6 @@
 ---
 layout: archive
-title: "Neal's Resume =)"
+title: "Neal's Resume :)"
 permalink: /cv/
 author_profile: true
 ---

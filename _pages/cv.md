@@ -7,7 +7,7 @@ author_profile: true
 
 {% include base_path %}
 
-[PDF_Resume](/files/NRamaswamy_Resume_081525.pdf)
+[PDF_Resume](/files/NRamaswamy_Resume_081525_nonumber.pdf)
 
 Projects
 ======

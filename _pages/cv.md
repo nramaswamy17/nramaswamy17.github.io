@@ -45,10 +45,10 @@ Projects
 
 Skills
 ======
-* **Programming Languages**: Python, C++, SQL, Julia
+* **Programming Languages**: Python, Bash, C++, SQL, Julia
 * **Frameworks & Tools**: Pytorch, Kubernetes, Tableau, Keyence, Minitab, Excel, AutoCAD, Revit
 * **Machine Learning**: CNN models, LSTM models, audio classification, statistical analysis
-* **Data Engineering**: ETL processes, MySQL, data analysis, forecasting models
+* **Controls & Motion Planning**: PID control, Kalman filtering, A* pathfinding, RRT algorithms, STOMP optimization
 * **Manufacturing**: Statistical Process Control (SPC), Gage R&R studies, OEE metrics, Computer Vision
 * **Life**: Dog Petting 
 
@@ -63,7 +63,7 @@ Work Experience
 **TESLA INC.**  
 *Software Engineering Intern*  \| *Jan 2025 – May 2025*
 
-  * Deployed a containerized, testable install script for Tesla PLM software using mdrip, ensuring repeatable installations on a complex system
+  * Deployed a containerized, testable install script for Tesla PLM software using mdrip, ensuring repeatable installations on a new Linux system
   * Developed a tool & design doc to diagnose TLS connection errors in distributed Java systems, slashing RCA time from hours/days to seconds
 
 **TESLA INC.**  

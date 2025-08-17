@@ -11,14 +11,14 @@ main:
   # - title: "Portfolio"
   #   url: /portfolio/
         
+  - title: "CV"
+    url: /cv/
+    
   - title: "Motion Planning"
     url: /motion-planning/
     
   - title: "Controls"
     url: /controls/
-    
-  - title: "CV"
-    url: /cv/
     
   # - title: "CV"
   #   url: /cv-json/

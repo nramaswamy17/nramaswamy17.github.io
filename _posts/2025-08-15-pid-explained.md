@@ -79,21 +79,5 @@ Each gain affects system behavior:
 9. **Wait** - Wait for next sampling period $$\Delta t$$
 10. **Repeat** - Return to step 2 until setpoint achieved or system stopped
 
-## Advantages of PID Control
-1. **Simplicity** - Easy to understand and implement with minimal computational requirements
-2. **Versatility** - Works well for many types of systems and processes
-3. **No Model Required** - Doesn't need detailed mathematical model of the system
-4. **Real-Time Performance** - Fast computation suitable for real-time control applications
-5. **Proven Robustness** - Decades of successful industrial applications
-6. **Intuitive Tuning** - Each parameter has clear physical meaning and effect
-7. **Hardware Efficiency** - Can be implemented on simple microcontrollers
-
-## Limitations
-1. **Linear Assumption** - Assumes linear system behavior, struggles with highly nonlinear systems
-2. **Single Input/Output** - Designed for SISO systems, requires extensions for MIMO control
-3. **Tuning Challenges** - Optimal parameter tuning can be difficult and time-consuming
-4. **Derivative Noise** - Derivative term amplifies measurement noise
-5. **Integral Windup** - Integral term can accumulate to problematic levels during saturation
-6. **Poor Disturbance Rejection** - May respond slowly to external disturbances
-7. **No Feedforward** - Cannot anticipate known disturbances or setpoint changes
-8. **Limited Adaptability** - Fixed parameters don't adapt to changing system dynamics
+## C++ Implementation 
+**[pid_control.cpp](https://github.com/nramaswamy17/Controls_Algorithms/blob/main/code_implementations/pid_control.cpp)**

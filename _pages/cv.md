@@ -7,6 +7,8 @@ author_profile: true
 
 {% include base_path %}
 
+[PDF_Resume](/files/NRamaswamy_Resume_081525.pdf)
+
 Projects
 ======
 * **Path Planning Algorithms: Theory & Implementation**
@@ -43,7 +45,7 @@ Projects
 
 Skills
 ======
-* **Programming Languages**: Python, Go, SQL, Julia, C
+* **Programming Languages**: Python, C++, SQL, Julia
 * **Frameworks & Tools**: Pytorch, Kubernetes, Tableau, Keyence, Minitab, Excel, AutoCAD, Revit
 * **Machine Learning**: CNN models, LSTM models, audio classification, statistical analysis
 * **Data Engineering**: ETL processes, MySQL, data analysis, forecasting models

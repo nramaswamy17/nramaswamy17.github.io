@@ -3,7 +3,7 @@ layout: archive
 title: "Neal's Resume :)"
 permalink: /cv/
 author_profile: true
----
+--- 
 
 {% include base_path %}
 

@@ -23,7 +23,7 @@ This interactive demonstration showcases a Model Predictive Control (MPC) system
 </div>
 
 ---
-Isn't that so cool!! Kinda looksl ike those Tesla Autopilot UI's!
+Isn't that so cool!! Kinda looks like those Tesla Autopilot UI's!
 
 ## Technical Details
 

@@ -43,11 +43,6 @@ The controller uses a bicycle model for vehicle dynamics and
 ### Optimization
 - Solves the optimization problem at each control step using a grid search approach.  
 - Splits the -30 to +30 steering state space into 50 options and picks the lowest cost approach. 
-- This was a simpler first approach rather than using calculus, future posts will use partial derivatives and numerical optimization to find a true minimmum, with eventual transition to Neural MPC
-
-## Related Projects
-
-- [Motion Planning Algorithms](/motion-planning/) - Various path planning and trajectory optimization methods
-- [Control Algorithms](/controls/) - Classical and modern control techniques
+- This was a simpler first approach - future posts will use partial derivatives and numerical optimization to find a true minimma, with eventual projects centering on Neural MPC
 
 *Note: This demo is best viewed on desktop devices with a web browser that supports HTML5 Canvas.*

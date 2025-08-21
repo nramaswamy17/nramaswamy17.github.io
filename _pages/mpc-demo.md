@@ -23,7 +23,7 @@ This interactive demonstration showcases a Model Predictive Control (MPC) system
 </div>
 
 ---
-Isn't that so cool!! Kinda looks like those Tesla Autopilot UIs!
+Isn't that so cool!! Kind of looks like those Tesla Autopilot UIs!
 
 ## Technical Details
 
@@ -38,11 +38,11 @@ Where:
 - **$$N$$**: Prediction horizon length
 
 ### Dynamics
-The controller uses a bicycle model for vehicle dynamics and 
+The controller uses a bicycle model for vehicle dynamics.
 
 ### Optimization
 - Solves the optimization problem at each control step using a grid search approach.  
-- Splits the -30 to +30 steering state space into 50 options and picks the lowest cost approach. 
-- This was a simpler first approach - future posts will use partial derivatives and numerical optimization to find a true minimma, with eventual projects centering on Neural MPC
+- Splits the steering state space into 50 options from -30 to +30 degrees and picks the lowest cost approach. 
+- This was a simpler first approach - future posts will use partial derivatives and numerical optimization to find a true minimum, with eventual projects centering on Neural MPC
 
 *Note: This demo is best viewed on desktop devices with a web browser that supports HTML5 Canvas.*

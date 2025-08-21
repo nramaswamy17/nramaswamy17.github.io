@@ -31,11 +31,11 @@ Isn't that so cool!! Kinda looksl ike those Tesla Autopilot UI's!
 $$\text{Cost} = \min \sum_{k=0}^{N-1} \left[Q_1(y_k - y_{\text{ref}})^2 + Q_2\theta_k^2 + R_1\delta_k^2 + R_2(\delta_k - \delta_{k-1})^2\right]$$
 
 Where:
-- **$y_k$**: Lateral position at step k
-- **$y_{\text{ref}}$**: Reference lane center position
-- **$\theta_k$**: Vehicle heading angle
-- **$\delta_k$**: Steering angle command
-- **$N$**: Prediction horizon length
+- **$$y_k$$**: Lateral position at step k
+- **$$y_{\text{ref}}$$**: Reference lane center position
+- **$$\theta_k$$**: Vehicle heading angle
+- **$$\delta_k$$**: Steering angle command
+- **$$N$$**: Prediction horizon length
 
 ### Dynamics
 The controller uses a bicycle model for vehicle dynamics and 

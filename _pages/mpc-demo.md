@@ -1,0 +1,53 @@
+---
+layout: archive
+title: "MPC Demo"
+permalink: /mpc-demo/
+author_profile: true
+---
+
+{% include base_path %}
+
+# Model Predictive Control (MPC) Lane Keeping Demo
+
+This interactive demonstration showcases a Model Predictive Control (MPC) system for autonomous vehicle lane keeping. The simulation visualizes how MPC optimizes steering commands over a prediction horizon to maintain the vehicle within lane boundaries while following a curved road.
+
+---
+
+<div style="text-align: center; margin: 20px 0;">
+  <iframe src="{{ base_path }}/_pages/mpc_demo.html" 
+          width="100%" 
+          height="800px" 
+          frameborder="0"
+          style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+  </iframe>
+</div>
+
+---
+Isn't that so cool!! Kinda looksl ike those Tesla Autopilot UI's!
+
+## Technical Details
+
+### Cost Function
+$$\text{Cost} = \min \sum_{k=0}^{N-1} \left[Q_1(y_k - y_{\text{ref}})^2 + Q_2\theta_k^2 + R_1\delta_k^2 + R_2(\delta_k - \delta_{k-1})^2\right]$$
+
+Where:
+- **$y_k$**: Lateral position at step k
+- **$y_{\text{ref}}$**: Reference lane center position
+- **$\theta_k$**: Vehicle heading angle
+- **$\delta_k$**: Steering angle command
+- **$N$**: Prediction horizon length
+
+### Dynamics
+The controller uses a bicycle model for vehicle dynamics and 
+
+### Optimization
+- Solves the optimization problem at each control step using a grid search approach.  
+- Splits the -30 to +30 steering state space into 50 options and picks the lowest cost approach. 
+- This was a simpler first approach rather than using calculus, future posts will use partial derivatives and numerical optimization to find a true minimmum, with eventual transition to Neural MPC
+
+## Related Projects
+
+- [Motion Planning Algorithms](/motion-planning/) - Various path planning and trajectory optimization methods
+- [Control Algorithms](/controls/) - Classical and modern control techniques
+
+*Note: This demo is best viewed on desktop devices with a web browser that supports HTML5 Canvas.*

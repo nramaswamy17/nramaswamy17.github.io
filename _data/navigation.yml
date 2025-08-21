@@ -14,6 +14,9 @@ main:
   - title: "CV"
     url: /cv/
     
+  - title: "MPC Demo"
+    url: /mpc-demo/
+    
   - title: "Motion Planning"
     url: /motion-planning/
     

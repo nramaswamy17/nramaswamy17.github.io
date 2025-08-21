@@ -47,7 +47,7 @@ Projects
       * Control Barrier Functions (CBF)
   * Developed mathematical foundations and practical implementations for each control method
 * **Gunshot Classification Device**
-  * Developed and trained classification CNN models using Pytorch – Tested LeNet5, ResNet50, and multiple custom models based on varying input shapes (1D vs 2D vector) and input styles (flattened raw audio vs Mel-Frequency Cepstral Coefficients); resulted in 99% accuracy in "ideal" test conditions, and ~20-25% accuracy in noise-heavy conditions (state-of-the-art in noise-heavy conditions is 14% accuracy)
+  * Developed and trained classification CNN models using PyTorch – Tested LeNet5, ResNet50, and multiple custom models based on varying input shapes (1D vs 2D vector) and input styles (flattened raw audio vs Mel-Frequency Cepstral Coefficients); resulted in 99% accuracy in "ideal" test conditions, and ~20-25% accuracy in noise-heavy conditions (state-of-the-art in noise-heavy conditions is 14% accuracy)
   * Created Python program to label audio files with the location of the signal and to chop the audio file with random quantity of noise leading and lagging the signal, improving model robustness during testing by preventing memorization of signal location in the input array
 
 Skills
@@ -86,7 +86,7 @@ Work Experience
   * Made improvements to and troubleshot production Computer Vision software, resulting in 4% yield increase / line on highest utilized station
   * Established OLE, Utilization, and OEE metrics on production lines as well as respective targets for Yield, Availability, and Performance; bottleneck analysis pointed out potential to improve throughput capacity by 28% through targeted OEE improvements
   * Performed Gage R&R Study, identifying high electrical tester variance as source of yield loss and driving investigation into equipment
-  * Lead project to improve cooling system on manufacturing line, worked with facilities design, construction, manufacturing engineering, and design engineering to develop design, expected to improve line throughput capacity by 41%
+  * Led project to improve cooling system on manufacturing line, worked with facilities design, construction, manufacturing engineering, and design engineering to develop design, expected to improve line throughput capacity by 41%
   * Established Statistical Process Control (SPC) standards with proper alarms, supporting line monitoring to process technicians for line capability
 
 **TESLA INC.**  
@@ -111,5 +111,3 @@ Work Experience
   * Developed a Tableau heatmap for manufacturing processes with drill-down options to communicate deviation locations and improve production throughput, permitting faster resolution of production downtime while also improving stakeholder experience
   * Digitalized information dashboards in Tableau and Power BI to update with live data and developed new databases to create product tracking across the production line
   * Created forecasts using Python and SQL for future deviations and designed human performance metrics on root cause investigations to track resource effectiveness, driving process changes to improve efficiency
-
-

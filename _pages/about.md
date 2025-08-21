@@ -37,5 +37,5 @@ This curiosity led me to pursue a **Master's in Computer Science & Engineering**
 - **Control Theory**: Exploring feedback systems and control mechanisms that enable robust and adaptive AI behavior
 - **Mathematics Behind Modern AI Architectures**: Delving into the mathematical foundations that underpin contemporary neural networks and machine learning models
 
----
+--- 
 

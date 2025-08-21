@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MPC Visualization</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #2a2a2a;
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin: 10px 0;
+        }
+        .dashboard {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .main-view {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .controls-panel {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .control-group {
+            margin-bottom: 20px;
+        }
+        .control-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #e0e0e0;
+        }
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        input[type="range"] {
+            flex: 1;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255,255,255,0.2);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #4CAF50;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .value-display {
+            min-width: 60px;
+            text-align: right;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 5px 0;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+        button.danger {
+            background: linear-gradient(45deg, #f44336, #da190b);
+        }
+        canvas {
+            border-radius: 10px;
+            background: #000;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .metric-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .metric-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 5px;
+        }
+        .metric-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+        .performance-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+        .performance-indicator.good { background: #4CAF50; }
+        .performance-indicator.warning { background: #FF9800; }
+        .performance-indicator.error { background: #f44336; }
+        .algorithm-info {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            border-left: 4px solid #4CAF50;
+        }
+        .algorithm-info h3 {
+            margin-top: 0;
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>MPC Lane Keeping System</h1>
+            <p>Model Predictive Control for Autonomous Vehicle Lane Keeping</p>
+            <p>A Simple Neal Demo :D</p>
+        </div>
+
+        <div class="dashboard">
+            <div class="main-view">
+                <canvas id="simulationCanvas" width="900" height="600"></canvas>
+            </div>
+
+            <div class="controls-panel">
+                <h3>🎛️ MPC Parameters</h3>
+                
+                <div class="control-group">
+                    <label>Prediction Horizon (N)</label>
+                    <div class="slider-container">
+                        <input type="range" id="horizon" min="5" max="45" value="25" step="1">
+                        <span class="value-display" id="horizonValue">15</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Lateral Error Weight (Q₁)</label>
+                    <div class="slider-container">
+                        <input type="range" id="lateralWeight" min="10" max="200" value="50" step="10">
+                        <span class="value-display" id="lateralWeightValue">50</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Heading Weight (Q₂)</label>
+                    <div class="slider-container">
+                        <input type="range" id="headingWeight" min="1" max="50" value="10" step="1">
+                        <span class="value-display" id="headingWeightValue">10</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Control Effort Weight (R)</label>
+                    <div class="slider-container">
+                        <input type="range" id="controlWeight" min="0.1" max="10" value="1" step="0.1">
+                        <span class="value-display" id="controlWeightValue">1.0</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Vehicle Speed (m/s)</label>
+                    <div class="slider-container">
+                        <input type="range" id="speed" min="5" max="30" value="15" step="1">
+                        <span class="value-display" id="speedValue">15</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Disturbance Level</label>
+                    <div class="slider-container">
+                        <input type="range" id="disturbance" min="0" max="100" value="0" step="0.5">
+                        <span class="value-display" id="disturbanceValue">0</span>
+                    </div>
+                </div>
+
+                <button id="pauseResumeBtn">⏸️ Pause</button>
+                <button id="resetBtn" class="danger">🔄 Reset</button>
+                
+            </div>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value" id="lateralError">0.00</div>
+                <div class="metric-label">Lateral Error (m)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="headingError">0.0</div>
+                <div class="metric-label">Heading Error (°)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="steeringAngle">0.0</div>
+                <div class="metric-label">Steering Command (°)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="solveTime">2.3</div>
+                <div class="metric-label">Solve Time (ms)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="controlFreq">10.0</div>
+                <div class="metric-label">Control Frequency (Hz)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="trajectoryQuality">95.2</div>
+                <div class="metric-label">Trajectory Quality (%)</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class ProfessionalMPCVisualizer {
+            constructor() {
+                this.canvas = document.getElementById('simulationCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                
+                // Vehicle dynamics parameters (matching C++ implementation)
+                this.L = 2.7; // wheelbase
+                this.dt = 0.1;
+                this.laneWidth = 3.5;
+                
+                // MPC parameters
+                this.horizon = 15;
+                this.Q_lateral = 50.0;
+                this.Q_heading = 10.0;
+                this.R_steering = 1.0;
+                
+                // Simulation state
+                this.vehicle = {
+                    x: 50,
+                    y: this.canvas.height / 2 + 20, // Start slightly off-center
+                    theta: 0.05, // Small initial heading error
+                    v: 15
+                };
+                
+                this.targetSpeed = 15;
+                this.currentSteering = 0;
+                this.running = true; // Auto-start the simulation
+                this.disturbanceLevel = 0;
+                
+                // Road animation parameters
+                this.roadOffset = 0;
+                this.roadSpeed = 0;
+                
+                // Visualization data
+                this.trajectory = [];
+                this.predictedPath = [];
+                this.laneHistory = [];
+                this.performanceHistory = [];
+                
+                // Performance metrics
+                this.metrics = {
+                    lateralError: 0,
+                    headingError: 0,
+                    steeringAngle: 0,
+                    solveTime: 0,
+                    trajectoryQuality: 100
+                };
+                
+                this.initializeControls();
+                this.generateLaneReference();
+                this.animationLoop();
+            }
+
+            initializeControls() {
+                // Slider controls
+                const sliders = ['horizon', 'lateralWeight', 'headingWeight', 'controlWeight', 'speed', 'disturbance'];
+                sliders.forEach(id => {
+                    const slider = document.getElementById(id);
+                    const valueDisplay = document.getElementById(id + 'Value');
+                    
+                    slider.addEventListener('input', (e) => {
+                        const value = parseFloat(e.target.value);
+                        valueDisplay.textContent = id === 'controlWeight' ? value.toFixed(1) : value;
+                        this.updateParameter(id, value);
+                    });
+                });
+
+                // Buttons
+                document.getElementById('pauseResumeBtn').addEventListener('click', () => this.togglePauseResume());
+                document.getElementById('resetBtn').addEventListener('click', () => this.reset());
+            }
+
+            updateParameter(param, value) {
+                switch(param) {
+                    case 'horizon': this.horizon = value; break;
+                    case 'lateralWeight': this.Q_lateral = value; break;
+                    case 'headingWeight': this.Q_heading = value; break;
+                    case 'controlWeight': this.R_steering = value; break;
+                    case 'speed': this.targetSpeed = value; this.vehicle.v = value; break;
+                    case 'disturbance': this.disturbanceLevel = value; break;
+                }
+            }
+
+            generateLaneReference() {
+                // Generate curved lane similar to C++ implementation
+                this.laneCenter = (x) => {
+                    const baseY = this.canvas.height / 2;
+                    return baseY + 30 * Math.sin(x * 0.01) + 15 * Math.sin(x * 0.03);
+                };
+            }
+
+            // Professional MPC implementation
+            solveMPC() {
+                const startTime = performance.now();
+                
+                let bestSteering = 0;
+                let minCost = Infinity;
+                let bestPrediction = [];
+                
+                // Grid search over steering commands (simplified QP solver)
+                const candidates = 41;
+                const maxSteering = 0.5; // ~30 degrees
+                
+                for (let i = 0; i < candidates; i++) {
+                    const steering = -maxSteering + (2 * maxSteering * i) / (candidates - 1);
+                    const [cost, prediction] = this.evaluateTrajectory(steering);
+                    
+                    if (cost < minCost) {
+                        minCost = cost;
+                        bestSteering = steering;
+                        bestPrediction = prediction;
+                    }
+                }
+                
+                this.predictedPath = bestPrediction;
+                this.metrics.solveTime = performance.now() - startTime;
+                
+                return bestSteering;
+            }
+
+            evaluateTrajectory(steeringInput) {
+                let state = { ...this.vehicle };
+                let totalCost = 0;
+                let prediction = [{ ...state }];
+                
+                for (let k = 0; k < this.horizon; k++) {
+                    // Apply steering with gradual decay over horizon
+                    const steering = steeringInput * Math.exp(-k * 0.05);
+                    state = this.propagateDynamics(state, steering);
+                    prediction.push({ ...state });
+                    
+                    // Cost function
+                    const laneCenter = this.laneCenter(state.x);
+                    const lateralError = state.y - laneCenter;
+                    const headingError = state.theta;
+                    const velocityError = state.v - this.targetSpeed;
+                    
+                    // Quadratic costs with increasing weight toward horizon end
+                    const timeWeight = 1 + k * 0.1; // Increase cost for later predictions
+                    totalCost += timeWeight * this.Q_lateral * lateralError * lateralError;
+                    totalCost += timeWeight * this.Q_heading * headingError * headingError;
+                    totalCost += this.R_steering * steering * steering;
+                    totalCost += 0.1 * velocityError * velocityError;
+                    
+                    // Add steering rate cost
+                    if (k > 0) {
+                        const prevSteering = steeringInput * Math.exp(-(k-1) * 0.05);
+                        const steeringRate = steering - prevSteering;
+                        totalCost += 2.0 * steeringRate * steeringRate;
+                    }
+                }
+                
+                return [totalCost, prediction];
+            }
+
+            propagateDynamics(state, steering) {
+                // Professional bicycle model implementation
+                const beta = Math.atan(0.5 * Math.tan(steering));
+                
+                return {
+                    x: state.x + this.dt * state.v * Math.cos(state.theta + beta),
+                    y: state.y + this.dt * state.v * Math.sin(state.theta + beta),
+                    theta: state.theta + this.dt * (state.v / this.L) * Math.sin(beta),
+                    v: state.v // Constant velocity for lane keeping
+                };
+            }
+
+            addDisturbance() {
+                if (this.disturbanceLevel > 0) {
+                    const noise = () => (Math.random() - 0.5) * this.disturbanceLevel * 0.01;
+                    this.vehicle.y += noise() * 5;
+                    this.vehicle.theta += noise() * 0.5;
+                }
+            }
+
+            update() {
+                if (!this.running) return;
+                
+                this.addDisturbance();
+                
+                // Solve MPC and apply control
+                this.currentSteering = this.solveMPC();
+                this.vehicle = this.propagateDynamics(this.vehicle, this.currentSteering);
+                
+                // Update road animation based on vehicle speed
+                this.roadSpeed = this.vehicle.v * 0.5; // Scale factor for visual effect
+                this.roadOffset += this.roadSpeed * this.dt;
+                if (this.roadOffset > 40) this.roadOffset = 0; // Reset for seamless loop
+                
+                // Update trajectory history
+                this.trajectory.push({ x: this.vehicle.x, y: this.vehicle.y });
+                if (this.trajectory.length > 300) this.trajectory.shift();
+                
+                // Wrap around canvas
+                if (this.vehicle.x > this.canvas.width + 100) {
+                    this.vehicle.x = -100;
+                    this.trajectory = [];
+                }
+                
+                // Update metrics
+                this.updateMetrics();
+            }
+
+            updateMetrics() {
+                const laneCenter = this.laneCenter(this.vehicle.x);
+                this.metrics.lateralError = this.vehicle.y - laneCenter;
+                this.metrics.headingError = this.vehicle.theta * 180 / Math.PI;
+                this.metrics.steeringAngle = this.currentSteering * 180 / Math.PI;
+                
+                // Calculate trajectory quality
+                const errorMagnitude = Math.abs(this.metrics.lateralError);
+                this.metrics.trajectoryQuality = Math.max(0, 100 - errorMagnitude * 20);
+                
+                // Update UI
+                document.getElementById('lateralError').textContent = this.metrics.lateralError.toFixed(2);
+                document.getElementById('headingError').textContent = this.metrics.headingError.toFixed(1);
+                document.getElementById('steeringAngle').textContent = this.metrics.steeringAngle.toFixed(1);
+                document.getElementById('solveTime').textContent = this.metrics.solveTime.toFixed(1);
+                document.getElementById('trajectoryQuality').textContent = this.metrics.trajectoryQuality.toFixed(1);
+                document.getElementById('controlFreq').textContent = (1000 / Math.max(this.metrics.solveTime, 16)).toFixed(1);
+            }
+
+            draw() {
+                this.ctx.fillStyle = '#0a0a0a';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                // Draw road surface
+                this.ctx.fillStyle = '#2a2a2a';
+                this.ctx.fillRect(0, this.canvas.height/2 - 50, this.canvas.width, 100);
+                
+                // Draw lane markings
+                this.drawLaneMarkings();
+                
+                // Draw vehicle trajectory (behind prediction)
+                this.drawTrajectory();
+                
+                // Draw MPC predicted trajectory (most important - draw on top)
+                this.drawPredictedPath();
+                
+                // Draw vehicle
+                this.drawVehicle();
+                
+                // Draw performance overlay
+                this.drawPerformanceOverlay();
+                
+                // Add MPC algorithm status overlay
+                this.drawMPCStatus();
+            }
+
+            drawLaneMarkings() {
+                const laneWidth = 60;
+                
+                // Draw animated road lines that move to the left
+                this.ctx.strokeStyle = '#ffff00';
+                this.ctx.lineWidth = 3;
+                this.ctx.setLineDash([20, 20]);
+                
+                // Draw multiple sets of lane markings for seamless animation
+                for (let offset = -40; offset <= this.canvas.width + 40; offset += 40) {
+                    const xPos = offset - this.roadOffset;
+                    
+                    // Lane boundaries
+                    this.ctx.beginPath();
+                    for (let x = 0; x < 40; x += 5) {
+                        const worldX = x + xPos + this.vehicle.x - this.canvas.width/2;
+                        const centerY = this.laneCenter(worldX);
+                        const offsetY = centerY - this.vehicle.y + this.canvas.height/2;
+                        
+                        if (x === 0) {
+                            this.ctx.moveTo(x + xPos, offsetY - laneWidth/2);
+                        } else {
+                            this.ctx.lineTo(x + xPos, offsetY - laneWidth/2);
+                        }
+                    }
+                    this.ctx.stroke();
+                    
+                    // Upper boundary
+                    this.ctx.beginPath();
+                    for (let x = 0; x < 40; x += 5) {
+                        const worldX = x + xPos + this.vehicle.x - this.canvas.width/2;
+                        const centerY = this.laneCenter(worldX);
+                        const offsetY = centerY - this.vehicle.y + this.canvas.height/2;
+                        
+                        if (x === 0) {
+                            this.ctx.moveTo(x + xPos, offsetY + laneWidth/2);
+                        } else {
+                            this.ctx.lineTo(x + xPos, offsetY + laneWidth/2);
+                        }
+                    }
+                    this.ctx.stroke();
+                }
+                
+                // Center line with animation
+                this.ctx.strokeStyle = '#666';
+                this.ctx.lineWidth = 1;
+                this.ctx.setLineDash([10, 10]);
+                
+                for (let offset = -40; offset <= this.canvas.width + 40; offset += 40) {
+                    const xPos = offset - this.roadOffset;
+                    
+                    this.ctx.beginPath();
+                    for (let x = 0; x < 40; x += 5) {
+                        const worldX = x + xPos + this.vehicle.x - this.canvas.width/2;
+                        const centerY = this.laneCenter(worldX);
+                        const offsetY = centerY - this.vehicle.y + this.canvas.height/2;
+                        
+                        if (x === 0) {
+                            this.ctx.moveTo(x + xPos, offsetY);
+                        } else {
+                            this.ctx.lineTo(x + xPos, offsetY);
+                        }
+                    }
+                    this.ctx.stroke();
+                }
+                
+                this.ctx.setLineDash([]);
+            }
+
+            drawPredictedPath() {
+                if (this.predictedPath.length < 2) return;
+                
+                // Draw prediction line with gradient effect
+                this.ctx.lineWidth = 4;
+                this.ctx.setLineDash([]);
+                
+                // Main prediction path
+                this.ctx.strokeStyle = '#00ff88';
+                this.ctx.beginPath();
+                
+                for (let i = 0; i < this.predictedPath.length; i++) {
+                    const state = this.predictedPath[i];
+                    const screenX = this.canvas.width/2 + (state.x - this.vehicle.x);
+                    const screenY = this.canvas.height/2 + (state.y - this.vehicle.y);
+                    
+                    if (i === 0) {
+                        this.ctx.moveTo(screenX, screenY);
+                    } else {
+                        this.ctx.lineTo(screenX, screenY);
+                    }
+                }
+                this.ctx.stroke();
+                
+                // Draw prediction waypoints
+                for (let i = 1; i < this.predictedPath.length; i += 2) {
+                    const state = this.predictedPath[i];
+                    const screenX = this.canvas.width/2 + (state.x - this.vehicle.x);
+                    const screenY = this.canvas.height/2 + (state.y - this.vehicle.y);
+                    
+                    // Fade waypoints based on distance in future
+                    const alpha = Math.max(0.3, 1.0 - (i / this.predictedPath.length));
+                    this.ctx.fillStyle = `rgba(0, 255, 136, ${alpha})`;
+                    this.ctx.beginPath();
+                    this.ctx.arc(screenX, screenY, 4, 0, 2 * Math.PI);
+                    this.ctx.fill();
+                    
+                    // Add time labels for key waypoints
+                    if (i % 5 === 0) {
+                        this.ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+                        this.ctx.font = '10px monospace';
+                        this.ctx.fillText(`t+${(i * this.dt).toFixed(1)}s`, screenX + 8, screenY - 8);
+                    }
+                }
+                
+                // Draw prediction cone to show uncertainty
+                if (this.predictedPath.length > 5) {
+                    this.ctx.strokeStyle = 'rgba(0, 255, 136, 0.2)';
+                    this.ctx.lineWidth = 1;
+                    this.ctx.setLineDash([2, 2]);
+                    
+                    const startState = this.predictedPath[0];
+                    const endState = this.predictedPath[this.predictedPath.length - 1];
+                    const startX = this.canvas.width/2 + (startState.x - this.vehicle.x);
+                    const startY = this.canvas.height/2 + (startState.y - this.vehicle.y);
+                    const endX = this.canvas.width/2 + (endState.x - this.vehicle.x);
+                    const endY = this.canvas.height/2 + (endState.y - this.vehicle.y);
+                    
+                    // Draw uncertainty bounds
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(startX, startY - 10);
+                    this.ctx.lineTo(endX, endY - 20);
+                    this.ctx.moveTo(startX, startY + 10);
+                    this.ctx.lineTo(endX, endY + 20);
+                    this.ctx.stroke();
+                    this.ctx.setLineDash([]);
+                }
+                
+                // Add prediction horizon indicator
+                this.ctx.fillStyle = 'rgba(0, 255, 136, 0.8)';
+                this.ctx.font = 'bold 12px monospace';
+                this.ctx.fillText(`MPC Horizon: ${this.horizon} steps (${(this.horizon * this.dt).toFixed(1)}s)`, 
+                                this.canvas.width - 250, 30);
+            }
+
+            drawTrajectory() {
+                if (this.trajectory.length < 2) return;
+                
+                this.ctx.strokeStyle = '#4CAF50';
+                this.ctx.lineWidth = 2;
+                this.ctx.beginPath();
+                
+                for (let i = 0; i < this.trajectory.length; i++) {
+                    const point = this.trajectory[i];
+                    const screenX = this.canvas.width/2 + (point.x - this.vehicle.x);
+                    const screenY = this.canvas.height/2 + (point.y - this.vehicle.y);
+                    
+                    if (i === 0) {
+                        this.ctx.moveTo(screenX, screenY);
+                    } else {
+                        this.ctx.lineTo(screenX, screenY);
+                    }
+                }
+                this.ctx.stroke();
+            }
+
+            drawVehicle() {
+                const screenX = this.canvas.width / 2;
+                const screenY = this.canvas.height / 2;
+                
+                this.ctx.save();
+                this.ctx.translate(screenX, screenY);
+                this.ctx.rotate(this.vehicle.theta);
+                
+                // Vehicle body
+                this.ctx.fillStyle = '#2196F3';
+                this.ctx.fillRect(-15, -8, 30, 16);
+                
+                // Vehicle direction
+                this.ctx.fillStyle = '#FF5722';
+                this.ctx.fillRect(10, -4, 8, 8);
+                
+                // Wheels (showing steering)
+                this.ctx.save();
+                this.ctx.translate(10, -6);
+                this.ctx.rotate(this.currentSteering);
+                this.ctx.fillStyle = '#333';
+                this.ctx.fillRect(-2, -3, 4, 6);
+                this.ctx.restore();
+                
+                this.ctx.save();
+                this.ctx.translate(10, 6);
+                this.ctx.rotate(this.currentSteering);
+                this.ctx.fillStyle = '#333';
+                this.ctx.fillRect(-2, -3, 4, 6);
+                this.ctx.restore();
+                
+                this.ctx.restore();
+            }
+
+            drawPerformanceOverlay() {
+                // Control horizon visualization
+                this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                this.ctx.font = '14px monospace';
+                this.ctx.fillText(`MPC Horizon: ${this.horizon} steps`, 20, 30);
+                this.ctx.fillText(`Solve Time: ${this.metrics.solveTime.toFixed(1)} ms`, 20, 50);
+                this.ctx.fillText(`Real-time Factor: ${(100 / Math.max(this.metrics.solveTime, 16)).toFixed(1)}x`, 20, 70);
+                
+                // Performance indicators
+                const rtFactor = 100 / Math.max(this.metrics.solveTime, 16);
+                const color = rtFactor > 5 ? '#4CAF50' : rtFactor > 2 ? '#FF9800' : '#f44336';
+                this.ctx.fillStyle = color;
+                this.ctx.beginPath();
+                this.ctx.arc(250, 65, 5, 0, 2 * Math.PI);
+                this.ctx.fill();
+            }
+
+            drawMPCStatus() {
+                // MPC algorithm status box
+                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                this.ctx.fillRect(this.canvas.width - 300, this.canvas.height - 120, 280, 100);
+                
+                this.ctx.strokeStyle = '#00ff88';
+                this.ctx.lineWidth = 2;
+                this.ctx.strokeRect(this.canvas.width - 300, this.canvas.height - 120, 280, 100);
+                
+                this.ctx.fillStyle = '#00ff88';
+                this.ctx.font = 'bold 14px monospace';
+                this.ctx.fillText('MPC CONTROLLER STATUS', this.canvas.width - 295, this.canvas.height - 100);
+                
+                this.ctx.font = '12px monospace';
+                this.ctx.fillStyle = 'white';
+                const laneCenter = this.laneCenter(this.vehicle.x);
+                const lateralError = this.vehicle.y - laneCenter;
+                
+                this.ctx.fillText(`Prediction Horizon: ${this.horizon} steps`, this.canvas.width - 295, this.canvas.height - 80);
+                this.ctx.fillText(`Lateral Error: ${lateralError.toFixed(2)} m`, this.canvas.width - 295, this.canvas.height - 65);
+                this.ctx.fillText(`Control Command: ${(this.currentSteering * 180/Math.PI).toFixed(1)}°`, this.canvas.width - 295, this.canvas.height - 50);
+                this.ctx.fillText(`Solve Time: ${this.metrics.solveTime.toFixed(1)} ms`, this.canvas.width - 295, this.canvas.height - 35);
+                
+            }
+
+            togglePauseResume() {
+                this.running = !this.running;
+                const btn = document.getElementById('pauseResumeBtn');
+                btn.textContent = this.running ? '⏸️ Pause' : '▶️ Resume';
+            }
+
+            reset() {
+                this.vehicle = {
+                    x: 50,
+                    y: this.canvas.height / 2 + 20, // Start slightly off-center
+                    theta: 0.05,
+                    v: this.targetSpeed
+                };
+                this.trajectory = [];
+                this.predictedPath = [];
+                this.currentSteering = 0;
+                this.running = true;
+                document.getElementById('pauseResumeBtn').textContent = '⏸️ Pause';
+            }
+
+            animationLoop() {
+                this.update();
+                this.draw();
+                requestAnimationFrame(() => this.animationLoop());
+            }
+        }
+
+        // Initialize the professional MPC visualizer
+        const mpcViz = new ProfessionalMPCVisualizer();
+    </script>
+</body>
+</html> 

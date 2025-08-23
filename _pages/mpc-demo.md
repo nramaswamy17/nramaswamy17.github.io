@@ -58,10 +58,12 @@ The controller uses a bicycle model for vehicle dynamics.
 ### Cost function
 $$\text{Cost} = \sum_{k=0}^{N-1} \left[
 \begin{align}
-&w_k \cdot Q_1(y_k - y_{\text{ref},k})^2 + w_k \cdot Q_{2,\text{adaptive}}(\theta_k - \theta_{\text{desired},k})^2 + \
-R_1\delta_k^2 + R_2(\delta_k - \delta_{k-1})^2 + \
+w_k \cdot Q_1(y_k - y_{\text{ref},k})^2 + \
+w_k \cdot Q_{2}(s_k)(\theta_k - \theta_{\text{desired}}(e_{y,k}))^2 +
+R_1(\delta_{\text{input}} \cdot e^{-\alpha k})^2 + \newline
+R_2(\delta_{\text{input}}(e^{-\alpha k} - e^{-\alpha (k-1)}))^2 + \
 Q_v(v_k - v_{\text{ref}})^2 + \
-\text{Constraint penalties}
+P_{\text{heading}}(s_k, \theta_k)
 \end{align}
 \right]$$
 

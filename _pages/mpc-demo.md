@@ -65,6 +65,16 @@ Q_v(v_k - v_{\text{ref}})^2 + \
 \end{align}
 \right]$$
 
+Where:
+- **$$w_k = 1 + 0.1k$$**: Time-weighted importance factor
+- **$$Q_{2,\text{adaptive}}$$**: Varies by the state of lane change
+- **$$\theta_{\text{desired},k}$$**: Can be non-zero during lane changes
+- **$$\alpha = 0.05$$**: Adaptive heading weight parameter
+- **$$Q_v = 0.1$$**: Velocity tracking weight
+- **$$R_2 = 2.0$$**: Steering smoothness weight
+- **$$P_{\text{heading}}(s,\theta)$$**: Quadratic barrier penalty if lane changing AND $$\\|\theta\\| > 1.5 \\cdot \theta_{\max}$$
+
+
 ### Optimization
 - Solves the optimization problem at each control step using a grid search approach.  
 - Splits the steering state space into 501 options from -30 to +30 degrees and picks the lowest cost approach. 

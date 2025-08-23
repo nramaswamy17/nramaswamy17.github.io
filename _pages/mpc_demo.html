@@ -277,10 +277,10 @@
                 this.Q_heading = 10.0;
                 this.R_steering = 1.0;
                 
-                // Simulation state
+                // Simulation state - Start in right lane but slightly off-center
                 this.vehicle = {
                     x: 50,
-                    y: this.canvas.height / 2 + 20, // Start slightly off-center
+                    y: this.canvas.height / 2 + 30, // Start in right lane, slightly toward center line
                     theta: 0.05, // Small initial heading error
                     v: 15
                 };
@@ -345,11 +345,26 @@
             }
 
             generateLaneReference() {
-                // Generate curved lane similar to C++ implementation
-                this.laneCenter = (x) => {
+                // Generate two-lane road with curved center line
+                this.roadCenterLine = (x) => {
                     const baseY = this.canvas.height / 2;
                     return baseY + 30 * Math.sin(x * 0.01) + 15 * Math.sin(x * 0.03);
                 };
+                
+                // Define road geometry
+                this.laneWidth = 40; // Width of each lane
+                this.totalRoadWidth = this.laneWidth * 2; // Total width for both lanes
+                
+                // Lane centers
+                this.leftLaneCenter = (x) => this.roadCenterLine(x) - this.laneWidth/2;
+                this.rightLaneCenter = (x) => this.roadCenterLine(x) + this.laneWidth/2;
+                
+                // Road edges
+                this.leftRoadEdge = (x) => this.roadCenterLine(x) - this.totalRoadWidth/2;
+                this.rightRoadEdge = (x) => this.roadCenterLine(x) + this.totalRoadWidth/2;
+                
+                // TARGET: Right lane center for MPC
+                this.laneCenter = this.rightLaneCenter;
             }
 
             // Professional MPC implementation
@@ -487,11 +502,7 @@
                 this.ctx.fillStyle = '#0a0a0a';
                 this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
                 
-                // Draw road surface
-                this.ctx.fillStyle = '#2a2a2a';
-                this.ctx.fillRect(0, this.canvas.height/2 - 50, this.canvas.width, 100);
-                
-                // Draw lane markings
+                // Draw lane markings (includes road surface)
                 this.drawLaneMarkings();
                 
                 // Draw vehicle trajectory (behind prediction)
@@ -508,55 +519,157 @@
                 
                 // Add MPC algorithm status overlay
                 this.drawMPCStatus();
+                
+                // Draw legend
+                this.drawLegend();
+            }
+
+            drawLegend() {
+                // Legend box
+                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                this.ctx.fillRect(20, this.canvas.height - 160, 280, 140);
+                
+                this.ctx.strokeStyle = '#fff';
+                this.ctx.lineWidth = 1;
+                this.ctx.strokeRect(20, this.canvas.height - 160, 280, 140);
+                
+                this.ctx.fillStyle = 'white';
+                this.ctx.font = 'bold 12px monospace';
+                this.ctx.fillText('RIGHT LANE KEEPING LEGEND', 25, this.canvas.height - 140);
+                
+                this.ctx.font = '10px monospace';
+                let y = this.canvas.height - 125;
+                
+                // Blue vehicle
+                this.ctx.fillStyle = '#2196F3';
+                this.ctx.fillRect(25, y - 5, 15, 8);
+                this.ctx.fillStyle = 'white';
+                this.ctx.fillText('Vehicle (targeting right lane)', 45, y);
+                y += 15;
+                
+                // Green predicted path
+                this.ctx.strokeStyle = '#00ff88';
+                this.ctx.lineWidth = 3;
+                this.ctx.beginPath();
+                this.ctx.moveTo(25, y);
+                this.ctx.lineTo(40, y);
+                this.ctx.stroke();
+                this.ctx.fillStyle = 'white';
+                this.ctx.fillText('MPC Predicted Path', 45, y + 3);
+                y += 15;
+                
+                // Yellow center line
+                this.ctx.strokeStyle = '#ffff00';
+                this.ctx.lineWidth = 3;
+                this.ctx.setLineDash([8, 8]);
+                this.ctx.beginPath();
+                this.ctx.moveTo(25, y);
+                this.ctx.lineTo(40, y);
+                this.ctx.stroke();
+                this.ctx.setLineDash([]);
+                this.ctx.fillStyle = 'white';
+                this.ctx.fillText('Yellow Center Line (Lane Divider)', 45, y + 3);
+                y += 15;
+                
+                // White road edges
+                this.ctx.strokeStyle = '#ffffff';
+                this.ctx.lineWidth = 3;
+                this.ctx.beginPath();
+                this.ctx.moveTo(25, y);
+                this.ctx.lineTo(40, y);
+                this.ctx.stroke();
+                this.ctx.fillStyle = 'white';
+                this.ctx.fillText('White Road Edges', 45, y + 3);
+                y += 15;
+                
+                // Green lane center reference
+                this.ctx.strokeStyle = 'rgba(0, 255, 0, 0.5)';
+                this.ctx.lineWidth = 2;
+                this.ctx.setLineDash([3, 6]);
+                this.ctx.beginPath();
+                this.ctx.moveTo(25, y);
+                this.ctx.lineTo(40, y);
+                this.ctx.stroke();
+                this.ctx.setLineDash([]);
+                this.ctx.fillStyle = 'rgba(0, 255, 0, 0.8)';
+                this.ctx.fillText('Right Lane Center (MPC Target)', 45, y + 3);
+                y += 15;
+                
+                // Road layout
+                this.ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                this.ctx.fillText('Road Layout: Left Lane | Right Lane', 25, y);
             }
 
             drawLaneMarkings() {
-                const laneWidth = 60;
+                // First draw road surface
+                this.ctx.fillStyle = '#2a2a2a';
+                this.ctx.beginPath();
+                for (let x = 0; x <= this.canvas.width; x += 5) {
+                    const worldX = x + this.vehicle.x - this.canvas.width/2;
+                    const leftEdgeY = this.leftRoadEdge(worldX);
+                    const rightEdgeY = this.rightRoadEdge(worldX);
+                    const leftOffsetY = leftEdgeY - this.vehicle.y + this.canvas.height/2;
+                    const rightOffsetY = rightEdgeY - this.vehicle.y + this.canvas.height/2;
+                    
+                    if (x === 0) {
+                        this.ctx.moveTo(x, leftOffsetY);
+                    } else {
+                        this.ctx.lineTo(x, leftOffsetY);
+                    }
+                }
+                for (let x = this.canvas.width; x >= 0; x -= 5) {
+                    const worldX = x + this.vehicle.x - this.canvas.width/2;
+                    const rightEdgeY = this.rightRoadEdge(worldX);
+                    const rightOffsetY = rightEdgeY - this.vehicle.y + this.canvas.height/2;
+                    this.ctx.lineTo(x, rightOffsetY);
+                }
+                this.ctx.closePath();
+                this.ctx.fill();
                 
                 // Draw animated road lines that move to the left
-                this.ctx.strokeStyle = '#ffff00';
-                this.ctx.lineWidth = 3;
-                this.ctx.setLineDash([20, 20]);
-                
-                // Draw multiple sets of lane markings for seamless animation
                 for (let offset = -40; offset <= this.canvas.width + 40; offset += 40) {
                     const xPos = offset - this.roadOffset;
                     
-                    // Lane boundaries
+                    // WHITE SOLID LINES - Road edges
+                    this.ctx.strokeStyle = '#ffffff';
+                    this.ctx.lineWidth = 4;
+                    this.ctx.setLineDash([]); // Solid line
+                    
+                    // Left road edge (solid white)
                     this.ctx.beginPath();
                     for (let x = 0; x < 40; x += 5) {
                         const worldX = x + xPos + this.vehicle.x - this.canvas.width/2;
-                        const centerY = this.laneCenter(worldX);
-                        const offsetY = centerY - this.vehicle.y + this.canvas.height/2;
+                        const edgeY = this.leftRoadEdge(worldX);
+                        const offsetY = edgeY - this.vehicle.y + this.canvas.height/2;
                         
                         if (x === 0) {
-                            this.ctx.moveTo(x + xPos, offsetY - laneWidth/2);
+                            this.ctx.moveTo(x + xPos, offsetY);
                         } else {
-                            this.ctx.lineTo(x + xPos, offsetY - laneWidth/2);
+                            this.ctx.lineTo(x + xPos, offsetY);
                         }
                     }
                     this.ctx.stroke();
                     
-                    // Upper boundary
+                    // Right road edge (solid white)
                     this.ctx.beginPath();
                     for (let x = 0; x < 40; x += 5) {
                         const worldX = x + xPos + this.vehicle.x - this.canvas.width/2;
-                        const centerY = this.laneCenter(worldX);
-                        const offsetY = centerY - this.vehicle.y + this.canvas.height/2;
+                        const edgeY = this.rightRoadEdge(worldX);
+                        const offsetY = edgeY - this.vehicle.y + this.canvas.height/2;
                         
                         if (x === 0) {
-                            this.ctx.moveTo(x + xPos, offsetY + laneWidth/2);
+                            this.ctx.moveTo(x + xPos, offsetY);
                         } else {
-                            this.ctx.lineTo(x + xPos, offsetY + laneWidth/2);
+                            this.ctx.lineTo(x + xPos, offsetY);
                         }
                     }
                     this.ctx.stroke();
                 }
                 
-                // Center line with animation
-                this.ctx.strokeStyle = '#666';
-                this.ctx.lineWidth = 1;
-                this.ctx.setLineDash([10, 10]);
+                // YELLOW DASHED CENTER LINE (divides left and right lanes)
+                this.ctx.strokeStyle = '#ffff00';
+                this.ctx.lineWidth = 3;
+                this.ctx.setLineDash([15, 15]); // Dashed yellow line
                 
                 for (let offset = -40; offset <= this.canvas.width + 40; offset += 40) {
                     const xPos = offset - this.roadOffset;
@@ -564,8 +677,32 @@
                     this.ctx.beginPath();
                     for (let x = 0; x < 40; x += 5) {
                         const worldX = x + xPos + this.vehicle.x - this.canvas.width/2;
-                        const centerY = this.laneCenter(worldX);
+                        const centerY = this.roadCenterLine(worldX);
                         const offsetY = centerY - this.vehicle.y + this.canvas.height/2;
+                        
+                        if (x === 0) {
+                            this.ctx.moveTo(x + xPos, offsetY);
+                        } else {
+                            this.ctx.lineTo(x + xPos, offsetY);
+                        }
+                    }
+                    this.ctx.stroke();
+                }
+                
+                // OPTIONAL: Draw faint reference lines for lane centers
+                this.ctx.strokeStyle = 'rgba(0, 255, 0, 0.3)';
+                this.ctx.lineWidth = 1;
+                this.ctx.setLineDash([5, 10]);
+                
+                // Right lane center reference (what the MPC targets)
+                for (let offset = -40; offset <= this.canvas.width + 40; offset += 40) {
+                    const xPos = offset - this.roadOffset;
+                    
+                    this.ctx.beginPath();
+                    for (let x = 0; x < 40; x += 5) {
+                        const worldX = x + xPos + this.vehicle.x - this.canvas.width/2;
+                        const rightLaneCenterY = this.rightLaneCenter(worldX);
+                        const offsetY = rightLaneCenterY - this.vehicle.y + this.canvas.height/2;
                         
                         if (x === 0) {
                             this.ctx.moveTo(x + xPos, offsetY);
@@ -729,26 +866,33 @@
             drawMPCStatus() {
                 // MPC algorithm status box
                 this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-                this.ctx.fillRect(this.canvas.width - 300, this.canvas.height - 120, 280, 100);
+                this.ctx.fillRect(this.canvas.width - 300, this.canvas.height - 140, 280, 120);
                 
                 this.ctx.strokeStyle = '#00ff88';
                 this.ctx.lineWidth = 2;
-                this.ctx.strokeRect(this.canvas.width - 300, this.canvas.height - 120, 280, 100);
+                this.ctx.strokeRect(this.canvas.width - 300, this.canvas.height - 140, 280, 120);
                 
                 this.ctx.fillStyle = '#00ff88';
                 this.ctx.font = 'bold 14px monospace';
-                this.ctx.fillText('MPC CONTROLLER STATUS', this.canvas.width - 295, this.canvas.height - 100);
+                this.ctx.fillText('MPC RIGHT LANE CONTROLLER', this.canvas.width - 295, this.canvas.height - 120);
                 
                 this.ctx.font = '12px monospace';
                 this.ctx.fillStyle = 'white';
-                const laneCenter = this.laneCenter(this.vehicle.x);
-                const lateralError = this.vehicle.y - laneCenter;
+                const rightLaneCenter = this.rightLaneCenter(this.vehicle.x);
+                const lateralError = this.vehicle.y - rightLaneCenter;
                 
-                this.ctx.fillText(`Prediction Horizon: ${this.horizon} steps`, this.canvas.width - 295, this.canvas.height - 80);
-                this.ctx.fillText(`Lateral Error: ${lateralError.toFixed(2)} m`, this.canvas.width - 295, this.canvas.height - 65);
-                this.ctx.fillText(`Control Command: ${(this.currentSteering * 180/Math.PI).toFixed(1)}°`, this.canvas.width - 295, this.canvas.height - 50);
-                this.ctx.fillText(`Solve Time: ${this.metrics.solveTime.toFixed(1)} ms`, this.canvas.width - 295, this.canvas.height - 35);
+                this.ctx.fillText(`Target: Right Lane Center`, this.canvas.width - 295, this.canvas.height - 100);
+                this.ctx.fillText(`Prediction Horizon: ${this.horizon} steps`, this.canvas.width - 295, this.canvas.height - 85);
+                this.ctx.fillText(`Lateral Error: ${lateralError.toFixed(2)} m`, this.canvas.width - 295, this.canvas.height - 70);
+                this.ctx.fillText(`Control Command: ${(this.currentSteering * 180/Math.PI).toFixed(1)}°`, this.canvas.width - 295, this.canvas.height - 55);
+                this.ctx.fillText(`Solve Time: ${this.metrics.solveTime.toFixed(1)} ms`, this.canvas.width - 295, this.canvas.height - 40);
                 
+                // Status indicator
+                const errorMagnitude = Math.abs(lateralError);
+                const status = errorMagnitude < 2 ? 'ON-TARGET' : errorMagnitude < 5 ? 'CORRECTING' : 'LARGE-ERROR';
+                const statusColor = errorMagnitude < 2 ? '#4CAF50' : errorMagnitude < 5 ? '#FF9800' : '#f44336';
+                this.ctx.fillStyle = statusColor;
+                this.ctx.fillText(`Status: ${status}`, this.canvas.width - 295, this.canvas.height - 25);
             }
 
             togglePauseResume() {
@@ -760,7 +904,7 @@
             reset() {
                 this.vehicle = {
                     x: 50,
-                    y: this.canvas.height / 2 + 20, // Start slightly off-center
+                    y: this.canvas.height / 2 + 30, // Start in right lane, slightly off-center
                     theta: 0.05,
                     v: this.targetSpeed
                 };
@@ -782,4 +926,4 @@
         const mpcViz = new ProfessionalMPCVisualizer();
     </script>
 </body>
-</html> 
+</html>

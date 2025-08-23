@@ -14,7 +14,7 @@ This interactive demonstration showcases a Model Predictive Control (MPC) system
 ---
 
 <div style="text-align: center; margin: 20px 0;">
-  <iframe src="{{ base_path }}/_pages/mpc_demo.html" 
+  <iframe src="{{ base_path }}/_pages/mpc_lanekeep.html" 
           width="100%" 
           height="800px" 
           frameborder="0"
@@ -23,7 +23,17 @@ This interactive demonstration showcases a Model Predictive Control (MPC) system
 </div>
 
 ---
-Isn't that so cool!! Kind of looks like those Tesla Autopilot UIs!
+
+<div style="text-align: center; margin: 20px 0;">
+  <iframe src="{{ base_path }}/_pages/mpc_lanechange.html" 
+          width="100%" 
+          height="1100px" 
+          frameborder="0"
+          style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+  </iframe>
+</div>
+
+---
 
 ## Technical Details
 

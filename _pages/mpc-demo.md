@@ -8,8 +8,9 @@ author_profile: true
 {% include base_path %}
 
 # Model Predictive Control (MPC) Demos
-1. Lane Keeping Assist System
-2. Lane Changing Assist System
+1. Lane Keeping System
+2. Lane Changing System
+3. Obstacle Avoidance System
 
 ---
 
@@ -100,5 +101,8 @@ This also uses the bicycle model
 </div>
 
 ---
+
+### Cost Function
+Technical details coming soon...
 
 *Note: This demo is best viewed on desktop devices with a web browser that supports HTML5 Canvas.*

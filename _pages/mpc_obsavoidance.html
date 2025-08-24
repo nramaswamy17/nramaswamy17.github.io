@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hierarchical MPC Obstacle Avoidance</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #2a2a2a;
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin: 10px 0;
+        }
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .main-view {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .controls-panel {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+        .control-group {
+            margin-bottom: 20px;
+        }
+        .control-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #e0e0e0;
+        }
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        input[type="range"] {
+            flex: 1;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255,255,255,0.2);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #4CAF50;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .value-display {
+            min-width: 60px;
+            text-align: right;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 5px 0;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+        button:disabled {
+            background: linear-gradient(45deg, #666, #555);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        button.danger {
+            background: linear-gradient(45deg, #f44336, #da190b);
+        }
+        button.lane-left {
+            background: linear-gradient(45deg, #2196F3, #1976D2);
+        }
+        button.lane-right {
+            background: linear-gradient(45deg, #FF9800, #F57C00);
+        }
+        button.obstacle {
+            background: linear-gradient(45deg, #9C27B0, #7B1FA2);
+        }
+        canvas {
+            border-radius: 10px;
+            background: #000;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .metric-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .metric-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 5px;
+        }
+        .metric-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+        .performance-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+        .performance-indicator.good { background: #4CAF50; }
+        .performance-indicator.warning { background: #FF9800; }
+        .performance-indicator.error { background: #f44336; }
+        .lane-controls {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+        .lane-controls h3 {
+            margin-top: 0;
+            color: #2196F3;
+            text-align: center;
+        }
+        .obstacle-controls {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #9C27B0;
+        }
+        .obstacle-controls h3 {
+            margin-top: 0;
+            color: #9C27B0;
+            text-align: center;
+        }
+        .lane-status {
+            text-align: center;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        .obstacle-status {
+            text-align: center;
+            margin: 10px 0;
+            font-weight: bold;
+            color: #9C27B0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Hierarchical MPC Avoidance</h1>
+            <p>High-Level Strategic Planner + Low-Level MPC Execution</p>
+        </div>
+
+        <div class="dashboard">
+            <div class="main-view">
+                <canvas id="simulationCanvas" width="900" height="600"></canvas>
+            </div>
+
+            <div class="controls-panel">
+                <div>
+                    <h3>Lane Control</h3>
+                    <div class="lane-controls">
+                        <div class="lane-status" id="laneStatus">Current Lane: Right</div>
+                        <button id="leftLaneBtn" class="lane-left">Request Left Lane</button>
+                        <button id="rightLaneBtn" class="lane-right">Request Right Lane</button>
+                    </div>
+                </div>
+
+                <div>
+                    <h3>Obstacle Control</h3>
+                    <div class="obstacle-controls">
+                        <div class="obstacle-status" id="obstacleStatus">No Active Obstacles</div>
+                        <div class="control-group">
+                            <label for="autoObstacles">Auto Generate Obstacles:</label>
+                            <div class="slider-container">
+                                <input type="checkbox" id="autoObstacles" style="width: auto; margin-right: 10px;">
+                                <span>Enable</span>
+                            </div>
+                        </div>
+                        <button id="clearObstaclesBtn" class="danger">Clear All Obstacles</button>
+                    </div>
+                </div>
+
+                <div>
+                    <h3>Simulation Control</h3>
+                    <button id="pauseResumeBtn">Pause</button>
+                    <button id="resetBtn" class="danger">Reset</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value" id="plannerMode">NORMAL</div>
+                <div class="metric-label">High-Level Mode</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="mpcMode">FOLLOWING</div>
+                <div class="metric-label">MPC Execution Mode</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="lateralError">0.00</div>
+                <div class="metric-label">Lateral Error (m)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="steeringAngle">0.0</div>
+                <div class="metric-label">Steering Command (°)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="obstacleCost">0</div>
+                <div class="metric-label">Obstacle Threat Level</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="plannerDecisionTime">0.0</div>
+                <div class="metric-label">Last Decision (s ago)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="activeObstacles">0</div>
+                <div class="metric-label">Active Obstacles</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="laneChangeProgress">0</div>
+                <div class="metric-label">Lane Change Progress (%)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="solveTime">0.0</div>
+                <div class="metric-label">MPC Solve Time (ms)</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class HierarchicalMPC {
+            constructor() {
+                this.canvas = document.getElementById('simulationCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                
+                // Vehicle dynamics parameters
+                this.L = 2.7;
+                this.dt = 0.1;
+                this.laneWidth = 40;
+                
+                // MPC parameters
+                this.horizon = 100;
+                this.Q_lateral = 50.0;
+                this.Q_heading = 10.0;
+                this.R_steering = 1.0;
+                this.Q_obstacle = 800.0;
+                this.Q_boundary = 2000.0;
+                
+                // ===== NEW: HIGH-LEVEL PLANNER =====
+                this.plannerStates = {
+                    NORMAL_FOLLOWING: 'NORMAL_FOLLOWING',
+                    LANE_CHANGE_REQUESTED: 'LANE_CHANGE_REQUESTED', 
+                    LANE_CHANGE_EXECUTING: 'LANE_CHANGE_EXECUTING',
+                    EMERGENCY_AVOIDANCE: 'EMERGENCY_AVOIDANCE'
+                };
+                
+                this.currentPlannerState = this.plannerStates.NORMAL_FOLLOWING;
+                this.plannerUpdateFreq = 6; // Hz - how often high-level planner runs
+                this.lastPlannerUpdate = 0;
+                this.plannerDecisionTime = 0;
+                this.minDecisionDuration = 1.0; // Minimum time to stick with a decision (seconds)
+                
+                // MPC execution modes - what the low-level MPC is constrained to do
+                this.mpcModes = {
+                    LANE_FOLLOWING: 'LANE_FOLLOWING',
+                    LANE_CHANGE_EXECUTION: 'LANE_CHANGE_EXECUTION', 
+                    OBSTACLE_AVOIDANCE: 'OBSTACLE_AVOIDANCE',
+                    EMERGENCY_STEERING: 'EMERGENCY_STEERING'
+                };
+                this.currentMPCMode = this.mpcModes.LANE_FOLLOWING;
+                
+                // Lane changing parameters
+                this.currentLane = 'right';
+                this.targetLane = 'right';
+                this.requestedLane = null; // NEW: User can request, but planner decides
+                this.isChangingLanes = false;
+                this.laneChangeProgress = 0;
+                this.laneChangeSpeed = 0.25;
+                this.laneChangeDuration = 3.0; // Reduced from 4.0
+                this.maxLaneChangeAngle = 6.0; // Increased from 3.0 for more aggressive changes
+                
+                // Obstacle parameters
+                this.obstacles = [];
+                this.obstacleDetectionRange = 150;
+                this.minObstacleDistance = 25;
+                this.autoObstacles = false;
+                this.nextObstacleTime = 0;
+                
+                // Simulation state
+                this.vehicle = {
+                    x: 50,
+                    y: this.canvas.height / 2 + 20,
+                    theta: 0,
+                    v: 15
+                };
+                
+                this.targetSpeed = 15;
+                this.currentSteering = 0;
+                this.running = true;
+                this.roadOffset = 0;
+                this.trajectory = [];
+                this.predictedPath = [];
+                
+                // Performance metrics
+                this.metrics = {
+                    lateralError: 0,
+                    headingError: 0,
+                    steeringAngle: 0,
+                    solveTime: 0,
+                    obstacleCost: 0
+                };
+                
+                this.initializeControls();
+                this.generateLaneReference();
+                
+                // Ensure checkbox is properly initialized
+                const autoObstaclesCheckbox = document.getElementById('autoObstacles');
+                if (autoObstaclesCheckbox) {
+                    autoObstaclesCheckbox.checked = true;
+                    this.autoObstacles = true;
+                    console.log(`Initialized auto obstacles checkbox to CHECKED`);
+                }
+                
+                this.animationLoop();
+            }
+
+            initializeControls() {
+                document.getElementById('pauseResumeBtn').addEventListener('click', () => this.togglePauseResume());
+                document.getElementById('resetBtn').addEventListener('click', () => this.reset());
+                
+                // Lane request buttons (note: "request" not "change")
+                document.getElementById('leftLaneBtn').addEventListener('click', () => this.requestLaneChange('left'));
+                document.getElementById('rightLaneBtn').addEventListener('click', () => this.requestLaneChange('right'));
+                
+                document.getElementById('clearObstaclesBtn').addEventListener('click', () => this.clearObstacles());
+                
+                document.getElementById('autoObstacles').addEventListener('change', (e) => {
+                    this.autoObstacles = e.target.checked;
+                    console.log(`Auto obstacles ${this.autoObstacles ? 'ENABLED' : 'DISABLED'}`);
+                    if (this.autoObstacles) {
+                        this.nextObstacleTime = performance.now() + 3000;
+                        console.log(`Next obstacle scheduled in 3 seconds`);
+                    } else {
+                        this.nextObstacleTime = 0;
+                        console.log(`Auto obstacle generation stopped`);
+                    }
+                });
+            }
+
+            generateLaneReference() {
+                this.roadCenterLine = (x) => this.canvas.height / 2;
+                this.totalRoadWidth = this.laneWidth * 2;
+                this.leftLaneCenter = (x) => this.roadCenterLine(x) - this.laneWidth/2;
+                this.rightLaneCenter = (x) => this.roadCenterLine(x) + this.laneWidth/2;
+                this.leftRoadEdge = (x) => this.roadCenterLine(x) - this.totalRoadWidth/2;
+                this.rightRoadEdge = (x) => this.roadCenterLine(x) + this.totalRoadWidth/2;
+            }
+
+            // ===== HIGH-LEVEL STRATEGIC PLANNER =====
+            runHighLevelPlanner() {
+                const currentTime = performance.now() / 1000;
+                
+                // Only run planner at specified frequency
+                if (currentTime - this.lastPlannerUpdate < (1.0 / this.plannerUpdateFreq)) {
+                    return;
+                }
+                
+                const timeSinceLastDecision = currentTime - this.plannerDecisionTime;
+                this.lastPlannerUpdate = currentTime;
+                
+                console.log(`HIGH-LEVEL PLANNER: Current state = ${this.currentPlannerState}`);
+                
+                // State machine for strategic decisions
+                switch (this.currentPlannerState) {
+                    case this.plannerStates.NORMAL_FOLLOWING:
+                        this.handleNormalFollowing(timeSinceLastDecision);
+                        break;
+                        
+                    case this.plannerStates.LANE_CHANGE_REQUESTED:
+                        this.handleLaneChangeRequested(timeSinceLastDecision);
+                        break;
+                        
+                    case this.plannerStates.LANE_CHANGE_EXECUTING:
+                        this.handleLaneChangeExecuting(timeSinceLastDecision);
+                        break;
+                        
+                    case this.plannerStates.EMERGENCY_AVOIDANCE:
+                        this.handleEmergencyAvoidance(timeSinceLastDecision);
+                        break;
+                }
+            }
+            
+            handleNormalFollowing(timeSinceLastDecision) {
+                // Check for user lane change requests - IMMEDIATE response
+                if (this.requestedLane && this.requestedLane !== this.currentLane) {
+                    console.log(`User requested lane change: ${this.currentLane} -> ${this.requestedLane}`);
+                    this.transitionToPlannerState(this.plannerStates.LANE_CHANGE_REQUESTED);
+                    return;
+                }
+                
+                // Check for threats - IMMEDIATE response for safety
+                const threatAnalysis = this.analyzeThreatSituation();
+                
+                // Emergency takes highest priority - no delay
+                if (threatAnalysis.isEmergency) {
+                    console.log(`EMERGENCY: ${threatAnalysis.reason}`);
+                    this.transitionToPlannerState(this.plannerStates.EMERGENCY_AVOIDANCE);
+                    return;
+                }
+                
+                // Automatic lane change for obstacle avoidance - IMMEDIATE if threat is significant
+                if (threatAnalysis.requiresLaneChange) {
+                    // Only impose delay for minor threats to avoid unnecessary lane changes
+                    const threatUrgency = threatAnalysis.maxThreatLevel;
+                    const needsImmediateAction = threatUrgency > 0.6 || threatAnalysis.closestObstacleDistance < 60;
+                    
+                    if (needsImmediateAction || timeSinceLastDecision > 0.5) { // Much shorter delay for auto-avoidance
+                        console.log(`THREAT DETECTED (urgency: ${threatUrgency.toFixed(2)}): ${threatAnalysis.reason}`);
+                        this.requestedLane = threatAnalysis.recommendedLane;
+                        this.transitionToPlannerState(this.plannerStates.LANE_CHANGE_REQUESTED);
+                        return;
+                    }
+                }
+                
+                // Stay in normal following
+                this.currentMPCMode = this.mpcModes.LANE_FOLLOWING;
+            }
+            
+            handleLaneChangeRequested(timeSinceLastDecision) {
+                // IMMEDIATELY check safety and start if clear - no artificial delay!
+                const safetyCheck = this.checkLaneChangeSafety(this.requestedLane);
+                
+                if (!safetyCheck.isSafe) {
+                    console.log(`Lane change not safe: ${safetyCheck.reason}`);
+                    
+                    // Only wait before giving up if we haven't waited long enough
+                    if (timeSinceLastDecision < this.minDecisionDuration) {
+                        console.log(`Waiting for clear path... (${(this.minDecisionDuration - timeSinceLastDecision).toFixed(1)}s remaining)`);
+                        return; // Keep waiting for path to clear
+                    }
+                    
+                    // We've waited long enough - check if we need emergency action
+                    const threatAnalysis = this.analyzeThreatSituation();
+                    if (threatAnalysis.isEmergency) {
+                        this.transitionToPlannerState(this.plannerStates.EMERGENCY_AVOIDANCE);
+                    } else {
+                        // Give up on lane change request
+                        console.log(`Giving up on lane change after ${this.minDecisionDuration}s`);
+                        this.requestedLane = null;
+                        this.transitionToPlannerState(this.plannerStates.NORMAL_FOLLOWING);
+                    }
+                    return;
+                }
+                
+                // Path is clear - start lane change execution IMMEDIATELY
+                console.log(`Starting lane change execution: ${this.currentLane} -> ${this.requestedLane}`);
+                this.targetLane = this.requestedLane;
+                this.isChangingLanes = true;
+                this.laneChangeProgress = 0;
+                this.transitionToPlannerState(this.plannerStates.LANE_CHANGE_EXECUTING);
+            }
+            
+            handleLaneChangeExecuting(timeSinceLastDecision) {
+                // Check if lane change is complete
+                if (this.laneChangeProgress >= 1.0) {
+                    console.log(`Lane change completed: Now in ${this.currentLane} lane`);
+                    this.requestedLane = null;
+                    this.isChangingLanes = false;
+                    this.transitionToPlannerState(this.plannerStates.NORMAL_FOLLOWING);
+                    return;
+                }
+                
+                // Check for emergency during lane change
+                const threatAnalysis = this.analyzeThreatSituation();
+                if (threatAnalysis.isEmergency) {
+                    console.log(`EMERGENCY during lane change!`);
+                    this.transitionToPlannerState(this.plannerStates.EMERGENCY_AVOIDANCE);
+                    return;
+                }
+                
+                // Continue lane change execution
+                this.currentMPCMode = this.mpcModes.LANE_CHANGE_EXECUTION;
+            }
+            
+            handleEmergencyAvoidance(timeSinceLastDecision) {
+                // Check if emergency has passed
+                const threatAnalysis = this.analyzeThreatSituation();
+                
+                if (!threatAnalysis.isEmergency && timeSinceLastDecision > this.minDecisionDuration) {
+                    console.log(`Emergency resolved, returning to normal operation`);
+                    this.transitionToPlannerState(this.plannerStates.NORMAL_FOLLOWING);
+                    return;
+                }
+                
+                // Stay in emergency mode
+                this.currentMPCMode = this.mpcModes.EMERGENCY_STEERING;
+            }
+            
+            transitionToPlannerState(newState) {
+                if (this.currentPlannerState !== newState) {
+                    console.log(`PLANNER TRANSITION: ${this.currentPlannerState} -> ${newState}`);
+                    this.currentPlannerState = newState;
+                    this.plannerDecisionTime = performance.now() / 1000;
+                }
+            }
+            
+            // ===== THREAT ANALYSIS =====
+            analyzeThreatSituation() {
+                let maxThreatLevel = 0;
+                let closestObstacleDistance = Infinity;
+                let currentLaneThreats = 0;
+                let alternateLaneThreats = 0;
+                
+                const currentLaneY = this.currentLane === 'left' ? 
+                    this.leftLaneCenter(this.vehicle.x) : this.rightLaneCenter(this.vehicle.x);
+                const alternateLaneY = this.currentLane === 'left' ? 
+                    this.rightLaneCenter(this.vehicle.x) : this.leftLaneCenter(this.vehicle.x);
+                
+                for (const obstacle of this.obstacles) {
+                    const dx = obstacle.x - this.vehicle.x;
+                    const dy = obstacle.y - this.vehicle.y;
+                    const distance = Math.sqrt(dx*dx + dy*dy);
+                    
+                    if (dx > 0 && dx < this.obstacleDetectionRange) { // Only threats ahead
+                        const distanceToCurrentLane = Math.abs(obstacle.y - currentLaneY);
+                        const distanceToAlternateLane = Math.abs(obstacle.y - alternateLaneY);
+                        
+                        if (distanceToCurrentLane < 25) {
+                            const threat = Math.max(0, (this.obstacleDetectionRange - dx) / this.obstacleDetectionRange);
+                            currentLaneThreats += threat;
+                            maxThreatLevel = Math.max(maxThreatLevel, threat);
+                            closestObstacleDistance = Math.min(closestObstacleDistance, distance);
+                        }
+                        
+                        if (distanceToAlternateLane < 25) {
+                            const threat = Math.max(0, (this.obstacleDetectionRange - dx) / this.obstacleDetectionRange);
+                            alternateLaneThreats += threat;
+                        }
+                    }
+                }
+                
+                // Decision logic
+                const isEmergency = closestObstacleDistance < 30 && maxThreatLevel > 0.8;
+                const requiresLaneChange = currentLaneThreats > 0.3 && alternateLaneThreats < currentLaneThreats * 0.5;
+                const recommendedLane = this.currentLane === 'left' ? 'right' : 'left';
+                
+                return {
+                    maxThreatLevel,
+                    closestObstacleDistance,
+                    currentLaneThreats,
+                    alternateLaneThreats,
+                    isEmergency,
+                    requiresLaneChange,
+                    recommendedLane,
+                    reason: isEmergency ? 'Imminent collision risk' : 
+                           requiresLaneChange ? 'Obstacle blocking current lane' : 'No significant threat'
+                };
+            }
+            
+            checkLaneChangeSafety(targetLane) {
+                // Check if target lane is blocked by obstacles
+                const targetLaneY = targetLane === 'left' ? 
+                    this.leftLaneCenter(this.vehicle.x) : this.rightLaneCenter(this.vehicle.x);
+                
+                for (const obstacle of this.obstacles) {
+                    const dx = obstacle.x - this.vehicle.x;
+                    const dy = obstacle.y - this.vehicle.y;
+                    const distance = Math.sqrt(dx*dx + dy*dy);
+                    const distanceToTargetLane = Math.abs(obstacle.y - targetLaneY);
+                    
+                    // Check if obstacle would block the lane change path
+                    if (dx > -30 && dx < 80 && distanceToTargetLane < 30) {
+                        return {
+                            isSafe: false,
+                            reason: `Obstacle blocking ${targetLane} lane at distance ${distance.toFixed(0)}m`
+                        };
+                    }
+                }
+                
+                return { isSafe: true, reason: 'Lane change path clear' };
+            }
+
+            // ===== MODIFIED MPC WITH MODE-BASED CONSTRAINTS =====
+            solveMPC() {
+                const startTime = performance.now();
+                
+                let bestSteering = 0;
+                let minCost = Infinity;
+                let bestPrediction = [];
+                let bestObstacleCost = 0;
+                
+                // MPC search range depends on execution mode
+                const [minSteering, maxSteering, candidates] = this.getMPCConstraints();
+                
+                for (let i = 0; i < candidates; i++) {
+                    const steering = minSteering + ((maxSteering - minSteering) * i) / (candidates - 1);
+                    const [cost, prediction, obstacleCost] = this.evaluateTrajectory(steering);
+                    
+                    if (cost < minCost) {
+                        minCost = cost;
+                        bestSteering = steering;
+                        bestPrediction = prediction;
+                        bestObstacleCost = obstacleCost;
+                    }
+                }
+                
+                this.predictedPath = bestPrediction;
+                this.metrics.solveTime = performance.now() - startTime;
+                this.metrics.obstacleCost = bestObstacleCost;
+                
+                return bestSteering;
+            }
+            
+            getMPCConstraints() {
+                // Return [minSteering, maxSteering, candidates] based on current MPC mode
+                switch (this.currentMPCMode) {
+                    case this.mpcModes.LANE_FOLLOWING:
+                        return [-0.3, 0.3, 201]; // Moderate steering for lane following
+                        
+                    case this.mpcModes.LANE_CHANGE_EXECUTION:
+                        return [-0.4, 0.4, 401]; // Slightly more aggressive for lane changes
+                        
+                    case this.mpcModes.OBSTACLE_AVOIDANCE:
+                        return [-0.5, 0.5, 501]; // More aggressive for obstacle avoidance
+                        
+                    case this.mpcModes.EMERGENCY_STEERING:
+                        return [-0.6, 0.6, 601]; // Maximum steering for emergency
+                        
+                    default:
+                        return [-0.5, 0.5, 501];
+                }
+            }
+
+            evaluateTrajectory(steeringInput) {
+                let state = { ...this.vehicle };
+                let totalCost = 0;
+                let totalObstacleCost = 0;
+                let prediction = [{ ...state }];
+                
+                for (let k = 0; k < this.horizon; k++) {
+                    const steering = steeringInput * Math.exp(-k * 0.05);
+                    state = this.propagateDynamics(state, steering);
+                    prediction.push({ ...state });
+                    
+                    const targetY = this.getCurrentTargetY(state.x);
+                    const lateralError = state.y - targetY;
+                    
+                    // Obstacle cost
+                    const obstacleCostInfo = this.calculateObstacleCost(state);
+                    totalObstacleCost += obstacleCostInfo.cost;
+                    
+                    // Road boundary cost
+                    const boundaryCost = this.calculateBoundaryCost(state);
+                    
+                    // MODE-SPECIFIC COST MODIFICATIONS
+                    const modeCosts = this.calculateModeCosts(state, lateralError, steering, k);
+                    
+                    // Standard costs
+                    const timeWeight = 1 + k * 0.1;
+                    totalCost += timeWeight * this.Q_lateral * lateralError * lateralError;
+                    totalCost += timeWeight * this.Q_heading * state.theta * state.theta;
+                    totalCost += this.R_steering * steering * steering;
+                    totalCost += obstacleCostInfo.cost;
+                    totalCost += boundaryCost;
+                    totalCost += modeCosts;
+                }
+                
+                return [totalCost, prediction, totalObstacleCost];
+            }
+            
+            calculateModeCosts(state, lateralError, steering, timeStep) {
+                let modeCost = 0;
+                
+                switch (this.currentMPCMode) {
+                    case this.mpcModes.LANE_FOLLOWING:
+                        // Penalize large steering angles during normal following
+                        if (Math.abs(steering) > 0.2) {
+                            modeCost += 50 * Math.pow(Math.abs(steering) - 0.2, 2);
+                        }
+                        break;
+                        
+                    case this.mpcModes.LANE_CHANGE_EXECUTION:
+                        // CRITICAL: Strongly encourage lane change progress
+                        const desiredLaneChangeDirection = this.targetLane === 'left' ? -1 : 1;
+                        const laneChangeHelpfulness = desiredLaneChangeDirection * (-lateralError);
+                        
+                        // Reward trajectory that moves toward target lane
+                        if (laneChangeHelpfulness > 0) {
+                            modeCost -= 200 * laneChangeHelpfulness; // Negative cost = reward
+                        } else {
+                            // Heavily penalize trajectory that moves away from target
+                            modeCost += 500 * Math.abs(laneChangeHelpfulness);
+                        }
+                        
+                        // Penalize excessive heading during lane change
+                        const maxAllowedHeading = this.maxLaneChangeAngle * Math.PI / 180;
+                        if (Math.abs(state.theta) > maxAllowedHeading) {
+                            modeCost += 300 * Math.pow(Math.abs(state.theta) - maxAllowedHeading, 2);
+                        }
+                        break;
+                        
+                    case this.mpcModes.EMERGENCY_STEERING:
+                        // Reduce steering penalty for emergency maneuvers
+                        // (Standard R_steering penalty is already included, this just reduces it)
+                        modeCost -= 0.5 * this.R_steering * steering * steering;
+                        break;
+                }
+                
+                return modeCost;
+            }
+
+            // ===== OBSTACLE MANAGEMENT (mostly unchanged) =====
+            addRandomObstacle() {
+                const targetLane = Math.random() < 0.5 ? 'left' : 'right';
+                const obstacleX = this.vehicle.x + (this.canvas.width / 2) + 20;
+                const obstacleY = targetLane === 'left' ? 
+                    this.leftLaneCenter(obstacleX) : this.rightLaneCenter(obstacleX);
+                
+                // Remove random variation - obstacles now appear exactly at lane center
+                // const yVariation = (Math.random() - 0.5) * 15;
+                
+                const obstacle = {
+                    x: obstacleX,
+                    y: obstacleY, // No variation - exact lane center
+                    radius: 10, // Fixed size for all obstacles
+                    type: 'static',
+                    speed: 15, // Fixed speed for moving obstacles
+                    lane: targetLane,
+                    threatLevel: 0
+                };
+                
+                this.obstacles.push(obstacle);
+                console.log(`Added ${obstacle.type} obstacle in ${targetLane} lane center`);
+            }
+
+            clearObstacles() {
+                const clearedCount = this.obstacles.length;
+                this.obstacles = [];
+                console.log(`Manually cleared ${clearedCount} obstacles`);
+                
+                // Reset planner to normal state when obstacles are cleared
+                this.currentPlannerState = this.plannerStates.NORMAL_FOLLOWING;
+                this.currentMPCMode = this.mpcModes.LANE_FOLLOWING;
+                this.updateUI(); // Immediately update UI to reflect cleared obstacles
+            }
+
+            updateObstacles() {
+                // Filter obstacles - remove those that are too far behind or ahead after vehicle reset
+                const initialCount = this.obstacles.length;
+                this.obstacles = this.obstacles.filter(obstacle => {
+                    if (obstacle.type === 'moving') {
+                        obstacle.x -= obstacle.speed * this.dt;
+                    }
+                    
+                    // Remove obstacles that are too far behind (normal case)
+                    const tooFarBehind = obstacle.x < this.vehicle.x - 500;
+                    
+                    // Remove obstacles that are way ahead (happens after vehicle position reset)
+                    const wayAhead = obstacle.x > this.vehicle.x + 2000;
+                    
+                    return !tooFarBehind && !wayAhead;
+                });
+                
+                // Log obstacle removal for debugging
+                const removedCount = initialCount - this.obstacles.length;
+                if (removedCount > 0) {
+                    console.log(`Removed ${removedCount} obstacles. Active obstacles: ${this.obstacles.length}`);
+                }
+                
+                // Double-check that auto obstacles are actually enabled
+                const checkbox = document.getElementById('autoObstacles');
+                const checkboxChecked = checkbox ? checkbox.checked : false;
+                
+                if (this.autoObstacles && checkboxChecked && this.running && performance.now() > this.nextObstacleTime) {
+                    console.log(`Auto obstacle check: autoObstacles=${this.autoObstacles}, checkbox=${checkboxChecked}, running=${this.running}, time=${performance.now()}, nextTime=${this.nextObstacleTime}`);
+                    this.addRandomObstacle();
+                    this.nextObstacleTime = performance.now() + 5000; // Fixed 5-second interval
+                    console.log(`Auto-spawned obstacle at ${new Date().toLocaleTimeString()}. Total obstacles: ${this.obstacles.length}`);
+                } else if (this.autoObstacles && !checkboxChecked) {
+                    // If internal state says enabled but checkbox is unchecked, fix the mismatch
+                    console.log(`Mismatch detected: internal state says auto obstacles enabled but checkbox is unchecked. Fixing...`);
+                    this.autoObstacles = false;
+                    this.nextObstacleTime = 0;
+                }
+            }
+
+            calculateObstacleCost(state) {
+                let totalObstacleCost = 0;
+                let maxThreatLevel = 0;
+                
+                for (const obstacle of this.obstacles) {
+                    const distance = Math.sqrt(
+                        Math.pow(state.x - obstacle.x, 2) + 
+                        Math.pow(state.y - obstacle.y, 2)
+                    );
+                    
+                    const safeDistance = obstacle.radius + 10;
+                    
+                    if (distance < safeDistance + 30) {
+                        const threatLevel = Math.max(0, (safeDistance + 30 - distance) / 30);
+                        obstacle.threatLevel = threatLevel;
+                        maxThreatLevel = Math.max(maxThreatLevel, threatLevel);
+                        
+                        if (distance < safeDistance) {
+                            totalObstacleCost += this.Q_obstacle * 10 * Math.pow(safeDistance - distance + 1, 2);
+                        } else {
+                            const normalizedDistance = (distance - safeDistance) / 30;
+                            totalObstacleCost += this.Q_obstacle * Math.exp(-normalizedDistance * 2);
+                        }
+                    } else {
+                        obstacle.threatLevel = 0;
+                    }
+                }
+                
+                return { cost: totalObstacleCost, maxThreat: maxThreatLevel };
+            }
+
+            calculateBoundaryCost(state) {
+                const roadTop = this.leftRoadEdge(state.x);
+                const roadBottom = this.rightRoadEdge(state.x);
+                let boundaryCost = 0;
+                const safeMargin = 8;
+                
+                const distanceFromTop = state.y - roadTop;
+                const distanceFromBottom = roadBottom - state.y;
+                
+                // Enhanced boundary cost with gradual increase near edges
+                const edgeGradientStart = 30; // Start applying edge cost 30 units from edge
+                const edgeGradientEnd = 8;    // Maximum cost at 8 units from edge
+                
+                // Calculate edge proximity costs
+                if (distanceFromTop < edgeGradientStart) {
+                    const edgeProximity = Math.max(0, edgeGradientStart - distanceFromTop);
+                    const edgeCost = this.Q_boundary * 0.1 * Math.pow(edgeProximity / (edgeGradientStart - edgeGradientEnd), 2);
+                    boundaryCost += edgeCost;
+                }
+                
+                if (distanceFromBottom < edgeGradientStart) {
+                    const edgeProximity = Math.max(0, edgeGradientStart - distanceFromBottom);
+                    const edgeCost = this.Q_boundary * 0.1 * Math.pow(edgeProximity / (edgeGradientStart - edgeGradientEnd), 2);
+                    boundaryCost += edgeCost;
+                }
+                
+                // Original safety margin costs (unchanged)
+                if (distanceFromTop < safeMargin) {
+                    boundaryCost += this.Q_boundary * Math.pow(Math.max(0, safeMargin - distanceFromTop), 2);
+                }
+                if (distanceFromBottom < safeMargin) {
+                    boundaryCost += this.Q_boundary * Math.pow(Math.max(0, safeMargin - distanceFromBottom), 2);
+                }
+                if (state.y < roadTop || state.y > roadBottom) {
+                    boundaryCost += this.Q_boundary * 20;
+                }
+                
+                return boundaryCost;
+            }
+
+            // ===== USER INTERFACE FOR LANE REQUESTS =====
+            requestLaneChange(targetLane) {
+                if (this.currentLane === targetLane) return;
+                
+                console.log(`USER REQUEST: Lane change to ${targetLane}`);
+                this.requestedLane = targetLane;
+                // Note: Don't immediately change lanes! Let the planner decide.
+            }
+
+            updateLaneChangeProgress() {
+                if (!this.isChangingLanes) return;
+                
+                this.laneChangeProgress += this.dt / this.laneChangeDuration;
+                
+                if (this.laneChangeProgress >= 1.0) {
+                    this.laneChangeProgress = 1.0;
+                    this.currentLane = this.targetLane;
+                    this.isChangingLanes = false;
+                    console.log(`Lane change completed to: ${this.currentLane}`);
+                }
+                
+                this.updateUI();
+            }
+
+            getCurrentTargetY(x) {
+                const leftY = this.leftLaneCenter(x);
+                const rightY = this.rightLaneCenter(x);
+                
+                if (!this.isChangingLanes) {
+                    return this.currentLane === 'left' ? leftY : rightY;
+                } else {
+                    const currentY = this.currentLane === 'left' ? leftY : rightY;
+                    const targetY = this.targetLane === 'left' ? leftY : rightY;
+                    const t = this.laneChangeProgress;
+                    const cosineProgress = (1 - Math.cos(t * Math.PI)) / 2;
+                    return currentY + (targetY - currentY) * cosineProgress;
+                }
+            }
+
+            propagateDynamics(state, steering) {
+                const beta = Math.atan(0.5 * Math.tan(steering));
+                
+                return {
+                    x: state.x + this.dt * state.v * Math.cos(state.theta + beta),
+                    y: state.y + this.dt * state.v * Math.sin(state.theta + beta),
+                    theta: state.theta + this.dt * (state.v / this.L) * Math.sin(beta),
+                    v: state.v
+                };
+            }
+
+            // ===== MAIN UPDATE LOOP =====
+            update() {
+                if (!this.running) return;
+                
+                // HIGH-LEVEL PLANNER RUNS FIRST
+                this.runHighLevelPlanner();
+                
+                // Update obstacles
+                this.updateObstacles();
+                
+                // Update lane change progress
+                this.updateLaneChangeProgress();
+                
+                // LOW-LEVEL MPC EXECUTION (constrained by planner mode)
+                this.currentSteering = this.solveMPC();
+                this.vehicle = this.propagateDynamics(this.vehicle, this.currentSteering);
+                
+                // Update visualization
+                this.roadSpeed = this.vehicle.v * 0.5;
+                this.roadOffset += this.roadSpeed * this.dt;
+                if (this.roadOffset > 40) this.roadOffset = 0;
+                
+                this.trajectory.push({ x: this.vehicle.x, y: this.vehicle.y });
+                if (this.trajectory.length > 300) this.trajectory.shift();
+                
+                if (this.vehicle.x > this.canvas.width + 3000) {
+                    this.vehicle.x = -100;
+                    this.trajectory = [];
+                    // Clear all obstacles when vehicle position resets to prevent accumulation
+                    console.log(`Vehicle position reset. Clearing ${this.obstacles.length} obstacles.`);
+                    this.obstacles = [];
+                }
+                // Update obstacle status display
+                const obstacleStatus = document.getElementById('obstacleStatus');
+                if (this.obstacles.length === 0) {
+                    obstacleStatus.textContent = 'No Active Obstacles';
+                    obstacleStatus.style.color = '#4CAF50';
+                } else {
+                    obstacleStatus.textContent = `${this.obstacles.length} Active Obstacle${this.obstacles.length === 1 ? '' : 's'}`;
+                    obstacleStatus.style.color = '#9C27B0';
+                }
+
+                // Auto obstacles status
+                const autoObstaclesCheckbox = document.getElementById('autoObstacles');
+                if (autoObstaclesCheckbox && this.autoObstacles !== autoObstaclesCheckbox.checked) {
+                    console.log(`Syncing auto obstacles state: internal=${this.autoObstacles}, checkbox=${autoObstaclesCheckbox.checked}`);
+                    this.autoObstacles = autoObstaclesCheckbox.checked;
+                    if (!this.autoObstacles) {
+                        this.nextObstacleTime = 0;
+                    }
+                }
+                this.updateMetrics();
+            }
+
+            updateMetrics() {
+                const targetY = this.getCurrentTargetY(this.vehicle.x);
+                this.metrics.lateralError = this.vehicle.y - targetY;
+                this.metrics.headingError = this.vehicle.theta * 180 / Math.PI;
+                this.metrics.steeringAngle = this.currentSteering * 180 / Math.PI;
+                
+                const currentTime = performance.now() / 1000;
+                const timeSinceDecision = currentTime - this.plannerDecisionTime;
+                
+                this.updateUI();
+            }
+
+            updateUI() {
+                // Planner state
+                document.getElementById('plannerMode').textContent = this.currentPlannerState.replace(/_/g, ' ');
+                document.getElementById('mpcMode').textContent = this.currentMPCMode.replace(/_/g, ' ');
+                
+                // Standard metrics
+                document.getElementById('lateralError').textContent = this.metrics.lateralError.toFixed(2);
+                document.getElementById('steeringAngle').textContent = this.metrics.steeringAngle.toFixed(1);
+                document.getElementById('obstacleCost').textContent = Math.round(this.metrics.obstacleCost);
+                document.getElementById('laneChangeProgress').textContent = Math.round(this.laneChangeProgress * 100);
+                document.getElementById('activeObstacles').textContent = this.obstacles.length;
+                document.getElementById('solveTime').textContent = this.metrics.solveTime.toFixed(1);
+                
+                const timeSinceDecision = (performance.now() / 1000) - this.plannerDecisionTime;
+                document.getElementById('plannerDecisionTime').textContent = timeSinceDecision.toFixed(1);
+                
+                // Lane status
+                const laneStatus = document.getElementById('laneStatus');
+                const leftBtn = document.getElementById('leftLaneBtn');
+                const rightBtn = document.getElementById('rightLaneBtn');
+                
+                if (this.isChangingLanes) {
+                    laneStatus.textContent = `Changing: ${this.currentLane.toUpperCase()} → ${this.targetLane.toUpperCase()} (${Math.round(this.laneChangeProgress * 100)}%)`;
+                    laneStatus.style.color = '#FF9800';
+                } else {
+                    laneStatus.textContent = `Current Lane: ${this.currentLane.toUpperCase()}`;
+                    laneStatus.style.color = '#4CAF50';
+                }
+                
+                // Show requested lane
+                if (this.requestedLane && !this.isChangingLanes) {
+                    laneStatus.textContent += ` (Requested: ${this.requestedLane.toUpperCase()})`;
+                    laneStatus.style.color = '#2196F3';
+                }
+                
+                leftBtn.disabled = (this.currentLane === 'left' && !this.requestedLane);
+                rightBtn.disabled = (this.currentLane === 'right' && !this.requestedLane);
+                
+                // Color-code planner mode
+                const plannerElement = document.getElementById('plannerMode');
+                const mpcElement = document.getElementById('mpcMode');
+                
+                switch(this.currentPlannerState) {
+                    case this.plannerStates.NORMAL_FOLLOWING:
+                        plannerElement.style.color = '#4CAF50'; break;
+                    case this.plannerStates.LANE_CHANGE_REQUESTED:
+                        plannerElement.style.color = '#2196F3'; break;
+                    case this.plannerStates.LANE_CHANGE_EXECUTING:
+                        plannerElement.style.color = '#FF9800'; break;
+                    case this.plannerStates.EMERGENCY_AVOIDANCE:
+                        plannerElement.style.color = '#f44336'; break;
+                }
+                
+                switch(this.currentMPCMode) {
+                    case this.mpcModes.LANE_FOLLOWING:
+                        mpcElement.style.color = '#4CAF50'; break;
+                    case this.mpcModes.LANE_CHANGE_EXECUTION:
+                        mpcElement.style.color = '#FF9800'; break;
+                    case this.mpcModes.EMERGENCY_STEERING:
+                        mpcElement.style.color = '#f44336'; break;
+                    default:
+                        mpcElement.style.color = '#2196F3'; break;
+                }
+            }
+
+            // ===== DRAWING METHODS (mostly unchanged) =====
+            draw() {
+                this.ctx.fillStyle = '#0a0a0a';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                this.drawRoad();
+                this.drawObstacles();
+                this.drawTrajectory();
+                this.drawPredictedPath();
+                this.drawVehicle();
+                this.drawHierarchicalStatus();
+            }
+
+            drawRoad() {
+                const worldRoadCenterY = this.canvas.height / 2;
+                const roadCenterY = worldRoadCenterY - this.vehicle.y + this.canvas.height / 2;
+                const roadTopY = roadCenterY - this.totalRoadWidth/2;
+                const roadBottomY = roadCenterY + this.totalRoadWidth/2;
+                
+                // Road surface
+                this.ctx.fillStyle = '#2a2a2a';
+                this.ctx.fillRect(0, roadTopY, this.canvas.width, this.totalRoadWidth);
+                
+                // Road edges
+                this.ctx.strokeStyle = '#ffffff';
+                this.ctx.lineWidth = 4;
+                this.ctx.setLineDash([]);
+                
+                for (let offset = -40; offset <= this.canvas.width + 40; offset += 40) {
+                    const xPos = offset - this.roadOffset;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(xPos, roadTopY);
+                    this.ctx.lineTo(xPos + 40, roadTopY);
+                    this.ctx.stroke();
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(xPos, roadBottomY);
+                    this.ctx.lineTo(xPos + 40, roadBottomY);
+                    this.ctx.stroke();
+                }
+                
+                // Center line
+                this.ctx.strokeStyle = '#ffff00';
+                this.ctx.lineWidth = 3;
+                this.ctx.setLineDash([15, 15]);
+                
+                for (let offset = -40; offset <= this.canvas.width + 40; offset += 40) {
+                    const xPos = offset - this.roadOffset;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(xPos, roadCenterY);
+                    this.ctx.lineTo(xPos + 40, roadCenterY);
+                    this.ctx.stroke();
+                }
+                
+                // Target lane highlighting
+                const worldTargetY = this.getCurrentTargetY(this.vehicle.x);
+                const screenTargetY = worldTargetY - this.vehicle.y + this.canvas.height / 2;
+                this.ctx.strokeStyle = this.isChangingLanes ? 'rgba(255, 152, 0, 0.8)' : 'rgba(0, 255, 136, 0.8)';
+                this.ctx.lineWidth = 4;
+                this.ctx.setLineDash([10, 5]);
+                
+                for (let offset = -40; offset <= this.canvas.width + 40; offset += 40) {
+                    const xPos = offset - this.roadOffset;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(xPos, screenTargetY);
+                    this.ctx.lineTo(xPos + 40, screenTargetY);
+                    this.ctx.stroke();
+                }
+                this.ctx.setLineDash([]);
+            }
+
+            drawObstacles() {
+                for (const obstacle of this.obstacles) {
+                    const screenX = this.canvas.width/2 + (obstacle.x - this.vehicle.x);
+                    const screenY = this.canvas.height/2 + (obstacle.y - this.vehicle.y);
+                    
+                    if (screenX < -50 || screenX > this.canvas.width + 50) continue;
+                    
+                    const threatLevel = obstacle.threatLevel || 0;
+                    let obstacleColor;
+                    if (threatLevel > 0.7) {
+                        obstacleColor = '#ff1744';
+                    } else if (threatLevel > 0.3) {
+                        obstacleColor = '#ff9800';
+                    } else {
+                        obstacleColor = obstacle.type === 'moving' ? '#9c27b0' : '#666';
+                    }
+                    
+                    this.ctx.fillStyle = obstacleColor;
+                    this.ctx.beginPath();
+                    this.ctx.arc(screenX, screenY, obstacle.radius, 0, 2 * Math.PI);
+                    this.ctx.fill();
+                    
+                    this.ctx.strokeStyle = threatLevel > 0.5 ? '#fff' : '#333';
+                    this.ctx.lineWidth = threatLevel > 0.5 ? 3 : 2;
+                    this.ctx.stroke();
+                    
+                    if (obstacle.type === 'moving') {
+                        this.ctx.fillStyle = '#fff';
+                        this.ctx.font = 'bold 12px monospace';
+                        this.ctx.textAlign = 'center';
+                        this.ctx.fillText('⬅', screenX, screenY + 4);
+                        this.ctx.textAlign = 'left';
+                    }
+                }
+            }
+
+            drawTrajectory() {
+                if (this.trajectory.length < 2) return;
+                
+                this.ctx.strokeStyle = '#4CAF50';
+                this.ctx.lineWidth = 2;
+                this.ctx.beginPath();
+                
+                for (let i = 0; i < this.trajectory.length; i++) {
+                    const point = this.trajectory[i];
+                    const screenX = this.canvas.width/2 + (point.x - this.vehicle.x);
+                    const screenY = this.canvas.height/2 + (point.y - this.vehicle.y);
+                    
+                    if (i === 0) {
+                        this.ctx.moveTo(screenX, screenY);
+                    } else {
+                        this.ctx.lineTo(screenX, screenY);
+                    }
+                }
+                this.ctx.stroke();
+            }
+
+            drawPredictedPath() {
+                if (this.predictedPath.length < 2) return;
+                
+                // Color path based on MPC mode
+                let pathColor = '#00ff88';
+                switch(this.currentMPCMode) {
+                    case this.mpcModes.LANE_CHANGE_EXECUTION:
+                        pathColor = '#FF9800'; break;
+                    case this.mpcModes.EMERGENCY_STEERING:
+                        pathColor = '#ff4444'; break;
+                    case this.mpcModes.OBSTACLE_AVOIDANCE:
+                        pathColor = '#2196F3'; break;
+                }
+                
+                this.ctx.lineWidth = 4;
+                this.ctx.strokeStyle = pathColor;
+                this.ctx.beginPath();
+                
+                for (let i = 0; i < this.predictedPath.length; i++) {
+                    const state = this.predictedPath[i];
+                    const screenX = this.canvas.width/2 + (state.x - this.vehicle.x);
+                    const screenY = this.canvas.height/2 + (state.y - this.vehicle.y);
+                    
+                    if (i === 0) {
+                        this.ctx.moveTo(screenX, screenY);
+                    } else {
+                        this.ctx.lineTo(screenX, screenY);
+                    }
+                }
+                this.ctx.stroke();
+            }
+
+            drawVehicle() {
+                const screenX = this.canvas.width / 2;
+                const screenY = this.canvas.height / 2;
+                
+                this.ctx.save();
+                this.ctx.translate(screenX, screenY);
+                this.ctx.rotate(this.vehicle.theta);
+                
+                // Vehicle color based on planner state
+                let vehicleColor = '#2196F3';
+                switch(this.currentPlannerState) {
+                    case this.plannerStates.LANE_CHANGE_REQUESTED:
+                        vehicleColor = '#FF9800'; break;
+                    case this.plannerStates.LANE_CHANGE_EXECUTING:
+                        vehicleColor = '#9C27B0'; break;
+                    case this.plannerStates.EMERGENCY_AVOIDANCE:
+                        vehicleColor = '#f44336'; break;
+                }
+                
+                this.ctx.fillStyle = vehicleColor;
+                this.ctx.fillRect(-15, -8, 30, 16);
+                
+                // Direction indicator
+                this.ctx.fillStyle = '#FF5722';
+                this.ctx.fillRect(10, -4, 8, 8);
+                
+                this.ctx.restore();
+            }
+
+            drawHierarchicalStatus() {
+                // Status display showing hierarchical control
+                const boxHeight = 100;
+                const statusY = this.canvas.height - boxHeight;
+                
+                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.9)';
+                this.ctx.fillRect(0, statusY, this.canvas.width, boxHeight);
+                
+                this.ctx.strokeStyle = '#00ff88';
+                this.ctx.lineWidth = 2;
+                this.ctx.strokeRect(0, statusY, this.canvas.width, boxHeight);
+                
+                this.ctx.fillStyle = '#00ff88';
+                this.ctx.font = 'bold 14px monospace';
+                this.ctx.fillText('HIERARCHICAL MPC CONTROL', 10, statusY + 20);
+                
+                // High-level planner status
+                this.ctx.font = '12px monospace';
+                this.ctx.fillStyle = 'white';
+                this.ctx.fillText('HIGH-LEVEL PLANNER:', 10, statusY + 40);
+                
+                let plannerColor = '#4CAF50';
+                switch(this.currentPlannerState) {
+                    case this.plannerStates.LANE_CHANGE_REQUESTED: plannerColor = '#2196F3'; break;
+                    case this.plannerStates.LANE_CHANGE_EXECUTING: plannerColor = '#FF9800'; break;
+                    case this.plannerStates.EMERGENCY_AVOIDANCE: plannerColor = '#f44336'; break;
+                }
+                
+                this.ctx.fillStyle = plannerColor;
+                this.ctx.fillText(`${this.currentPlannerState.replace(/_/g, ' ')}`, 200, statusY + 40);
+                
+                // Low-level MPC status
+                this.ctx.fillStyle = 'white';
+                this.ctx.fillText('LOW-LEVEL MPC:', 10, statusY + 60);
+                
+                let mpcColor = '#4CAF50';
+                switch(this.currentMPCMode) {
+                    case this.mpcModes.LANE_CHANGE_EXECUTION: mpcColor = '#FF9800'; break;
+                    case this.mpcModes.EMERGENCY_STEERING: mpcColor = '#f44336'; break;
+                    case this.mpcModes.OBSTACLE_AVOIDANCE: mpcColor = '#2196F3'; break;
+                }
+                
+                this.ctx.fillStyle = mpcColor;
+                this.ctx.fillText(`${this.currentMPCMode.replace(/_/g, ' ')}`, 200, statusY + 60);
+                
+                // Decision timing
+                const timeSinceDecision = (performance.now() / 1000) - this.plannerDecisionTime;
+                this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                this.ctx.fillText(`Last Decision: ${timeSinceDecision.toFixed(1)}s ago | Update Rate: ${this.plannerUpdateFreq}Hz`, 450, statusY + 40);
+                
+                // Current request status
+                if (this.requestedLane) {
+                    this.ctx.fillStyle = '#2196F3';
+                    this.ctx.fillText(`Requested Lane: ${this.requestedLane.toUpperCase()}`, 450, statusY + 60);
+                }
+                
+                // Performance metrics
+                this.ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                this.ctx.fillText(`Obstacles: ${this.obstacles.length} | Threat: ${Math.round(this.metrics.obstacleCost)} | Steering: ${this.metrics.steeringAngle.toFixed(1)}°`, 450, statusY + 80);
+            }
+
+            togglePauseResume() {
+                this.running = !this.running;
+                const btn = document.getElementById('pauseResumeBtn');
+                btn.textContent = this.running ? 'Pause' : 'Resume';
+            }
+
+            reset() {
+                
+                const clearedObstacles = this.obstacles.length;
+                this.obstacles = [];
+                this.vehicle = {
+                    x: 50,
+                    y: this.canvas.height / 2 + 20,
+                    theta: 0,
+                    v: this.targetSpeed
+                };
+                
+                // Reset hierarchical control
+                this.currentPlannerState = this.plannerStates.NORMAL_FOLLOWING;
+                this.currentMPCMode = this.mpcModes.LANE_FOLLOWING;
+                this.plannerDecisionTime = performance.now() / 1000;
+                this.lastPlannerUpdate = 0;
+                
+                this.currentLane = 'right';
+                this.targetLane = 'right';
+                this.requestedLane = null;
+                this.isChangingLanes = false;
+                this.laneChangeProgress = 0;
+                
+                this.obstacles = [];
+                this.trajectory = [];
+                this.predictedPath = [];
+                this.currentSteering = 0;
+                this.running = true;
+                
+                document.getElementById('pauseResumeBtn').textContent = 'Pause';
+                this.updateUI();
+            
+                
+            }
+
+            animationLoop() {
+                this.update();
+                this.draw();
+                requestAnimationFrame(() => this.animationLoop());
+            }
+        }
+
+        // Initialize the hierarchical MPC system
+        const hierarchicalMPC = new HierarchicalMPC();
+    </script>
+</body>
+</html>

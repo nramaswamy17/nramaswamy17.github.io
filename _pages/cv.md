@@ -7,17 +7,23 @@ author_profile: true
 
 {% include base_path %}
 
-[PDF_Resume](/files/NRamaswamy_Resume_081525.pdf)
+[PDF_Resume](/files/NRamaswamy_Resume_082425.pdf)
 
 Projects
 ======
-* **MPC Lane Keeping System for Autonomous Vehicles**
-  * Developed professional Model Predictive Control system for autonomous vehicle lane keeping with real-time optimization and constraint satisfaction ([View MPC Demo](/mpc-demo/))
-    * Implemented bicycle model vehicle dynamics with kinematic constraints and steering/rate limits
-    * Designed quadratic cost function balancing lateral error, heading deviation, control effort, and smoothness
-    * Achieved sub-1ms solve times for 15-step prediction horizon using grid search optimization
-    * Created dual implementation: C++ for performance analysis and interactive HTML web visualization for portfolio demonstration
-    * Demonstrated receding horizon with real-time trajectory prediction and constraint handling
+* **MPC Driver Assist for Autonomous Vehicles**
+  * Developed Model Predictive Control systems for autonomous vehicle applications with real-time optimization and constraint satisfaction ([View MPC Demo](/mpc-demo/))
+    * **Lane Keeping System**: Implemented bicycle model vehicle dynamics with kinematic constraints and steering/rate limits
+      * Designed quadratic cost function balancing lateral error, heading deviation, control effort, and smoothness
+      * Achieved sub-1ms solve times for 15-step prediction horizon using grid search optimization (41 steering options)
+    * **Lane Changing System**: Extended MPC framework for dynamic lane change maneuvers
+      * Implemented time-weighted cost function with adaptive heading control during lane transitions
+      * Added velocity tracking and quadratic barrier penalties for safe heading angle limits
+      * Used 501 steering options for higher precision control during complex maneuvers
+    * **Obstacle Avoidance System**: Developed collision avoidance capabilities for dynamic environments
+      * Integrated obstacle detection and avoidance constraints into MPC optimization framework
+      * Maintained real-time performance while ensuring safe trajectory generation around obstacles
+    * Demonstrated receding horizon with real-time trajectory prediction and constraint handling across all three systems
 * **Path Planning Algorithms: Theory & Implementation**
   * Implemented and analyzed multiple path planning algorithms: ([View Motion Planning Projects](/motion-planning/))
     * Learning-Based Methods

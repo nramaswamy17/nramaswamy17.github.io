@@ -2,7 +2,7 @@
 title: "Proportional-Integral-Derivative (PID) Control"
 date: 2025-08-15
 permalink: /posts/2025/08/pid-explained/
-categories: controls
+categories: motion-planning
 tags:
   - control-theory
   - feedback-control

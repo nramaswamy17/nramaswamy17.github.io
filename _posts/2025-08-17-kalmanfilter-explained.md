@@ -2,7 +2,7 @@
 title: "Kalman Filter"
 date: 2025-08-17
 permalink: /posts/2025/08/kalmanfilter-explained/
-categories: controls
+categories: motion-planning
 tags:
   - state-estimation
   - kalman-filter

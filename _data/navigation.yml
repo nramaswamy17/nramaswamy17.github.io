@@ -13,15 +13,15 @@ main:
         
   - title: "CV"
     url: /cv/
-    
+
+  - title: "Projects"
+    url: /projects/
+
   - title: "MPC Demo"
     url: /mpc-demo/
     
   - title: "Motion Planning"
     url: /motion-planning/
-    
-  - title: "Controls"
-    url: /controls/
     
   # - title: "CV"
   #   url: /cv-json/

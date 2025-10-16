@@ -16,9 +16,6 @@ main:
 
   - title: "Projects"
     url: /projects/
-
-  - title: "MPC Demo"
-    url: /mpc-demo/
     
   - title: "Motion Planning"
     url: /motion-planning/

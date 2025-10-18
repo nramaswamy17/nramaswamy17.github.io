@@ -4,12 +4,12 @@
   margin: 0 auto;
   font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   color: #333;
-  line-height: 1.6;
+  line-height: 1.4; /* Reduced from 1.6 */
 }
 
 /* Header Styles */
 .cv-header {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem; /* Reduced from 2rem */
   border-bottom: 2px solid #f2f2f2;
   padding-bottom: 1rem;
 }
@@ -55,13 +55,13 @@
 
 /* Section Styles */
 .cv-section {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem; /* Reduced from 2rem */
 }
 
 .cv-section h2 {
   border-bottom: 1px solid #f2f2f2;
   padding-bottom: 0.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem; /* Reduced from 1rem */
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -74,7 +74,7 @@
 
 /* Item Styles */
 .cv-item {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem; /* Reduced from 1.5rem */
 }
 
 .cv-item-header {
@@ -107,7 +107,7 @@
 }
 
 .cv-item-highlights li {
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.15rem; /* Reduced from 0.25rem */
 }
 
 .cv-item-courses ul {

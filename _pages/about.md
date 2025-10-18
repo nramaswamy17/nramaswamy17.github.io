@@ -1,21 +1,28 @@
 ---
 layout: archive
 permalink: /
-title: "Neal Ramaswamy - Computer Science Student & AI Enthusiast"
+title: "Neal Ramaswamy"
 author_profile: true
 redirect_from: 
   - /about/
   - /about.html
 ---
 
-I'm a Computer Science student passionate about artificial intelligence and the mathematical theory behind machine learning systems. My journey into AI has been driven by a desire to understand the fundamental principles that make intelligent systems work and drive benefit for humanity.
+I'm a Computer Science student passionate about understanding the fundamental principles that make intelligent systems work and drive benefit for humanity.
 
 
-## Current Projects
+# Current Projects
 
-For updates on what I'm currently working on, check out my blogs, where I share new projects, experiments, and thoughts on AI.
+## Autonomous Vehicle Projects
+- [Model Predictive Control](/posts/2025/09/mpc-demo)
+
+## Blogs
 - [Motion Blanning Blog](/motion-planning/)
-- [Controls Blog](/controls/)
+- [Schoolwork Blog](/schoolwork/)
+
+
+
+------------------------------------------------------
 
 ## My Path to AI
 

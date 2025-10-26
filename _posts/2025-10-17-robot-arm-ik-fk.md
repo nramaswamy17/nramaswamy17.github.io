@@ -43,7 +43,7 @@ Solve for $$x_f$$ and $$y_f$$
 
 ## Inverse Kinematics
 
-<video muted playsinline loop preload="none" poster="/post_data/robot-arm-fk-ik/single-arm-ik.png" data-src="/post_data/robot-arm-fk-ik/single-arm-ik.mp4"></video>
+<video controls muted playsinline loop preload="metadata" poster="/post_data/robot-arm-fk-ik/single-arm-ik.png" src="/post_data/robot-arm-fk-ik/single-arm-ik.mp4" data-src="/post_data/robot-arm-fk-ik/single-arm-ik.mp4"></video>
 
 <script>
   const v = document.querySelector('video[data-src]');

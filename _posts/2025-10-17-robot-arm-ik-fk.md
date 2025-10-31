@@ -7,6 +7,7 @@ tags:
   - Kinematics
   - Inverse Kinematics
 redirect_from:
+  - /robot-arm-fk-ik/
 excerpt: "Demonstrations of deterministic robot arm movements using FK / IK"
 ---
 

@@ -21,6 +21,8 @@ Forward Kinematics: Where will the system be located at, given I rotate my arm b
 
 Inverse Kinematics: How should I rotate my arm so that my system ends up at some specified location?
 
+View Code Repository: [Robot Arm Repository](https://github.com/nramaswamy17/C-Simulations/tree/main/ik_fk_review)
+
 # Double Joint Robot Arm
 
 Two joints are defined, where rotatation for both is along the same axis. 
@@ -163,7 +165,7 @@ $$k_2 = L_2\sin(\theta_2)$$
 $$d = \sqrt{x^2 + y^2}$$
 
 ## Code
-https://github.com/nramaswamy17/C-Simulations/tree/main/ik_fk_review/Double_Joint
+[Double Joint Robot Simulation Code](https://github.com/nramaswamy17/C-Simulations/tree/main/ik_fk_review/Double_Joint)
 
 # Single Joint Robot Arm
 
@@ -206,7 +208,7 @@ Solve for $$x_f$$ and $$y_f$$
 </script>
 
 ## Code
-https://github.com/nramaswamy17/C-Simulations/tree/main/ik_fk_review/Single_Joint
+[Single Joint Robot Simulation Code](https://github.com/nramaswamy17/C-Simulations/tree/main/ik_fk_review/Single_Joint)
 
 ### Equations
 Solve for $$\theta$$

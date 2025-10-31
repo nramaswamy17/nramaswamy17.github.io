@@ -13,10 +13,10 @@ I'm a Computer Science student passionate about understanding the fundamental pr
 
 # Current [Projects](/projects/)
 
-## Autonomous Vehicle Projects
+## Projects
 <!--- [Semi-truck AV](/posts/2025/10/semi-truck-av/) -->
-- [Model Predictive Control](/posts/2025/09/mpc-demo)
-- [Robot Arm Control](/posts/2025/10/robot-arm-fk-ik/)
+- [Autonomous Vehicle Model Predictive Control](/posts/2025/09/mpc-demo)
+- [Robot Arm Kinematics by # of Joints](/posts/2025/10/robot-arm-fk-ik/)
 
 ## Blogs
 - [Motion Blanning Blog](/motion-planning/)

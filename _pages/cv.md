@@ -7,10 +7,17 @@ author_profile: true
 
 {% include base_path %}
 
-[PDF_Resume](/files/NRamaswamy_Resume_082425.pdf)
+[PDF_Resume](/files/NRamaswamy_Resume_100925.pdf)
 
 Projects
 ======
+* **Robotic Arm 2D Simulation**
+  * Developed a 2D robotic arm simulation environment with forward and inverse kinematics ([View Robot Arm Demo](/robot-arm-ik-fk/))
+    * Implemented forward kinematics calculations for multi-joint robotic arm visualization
+    * Created inverse kinematics solver to determine joint angles for desired end-effector positions
+    * Built interactive visualization allowing real-time manipulation and position control
+    * Demonstrated practical applications of robotics fundamentals through interactive examples
+
 * **MPC Driver Assist for Autonomous Vehicles**
   * Developed Model Predictive Control systems for autonomous vehicle applications with real-time optimization and constraint satisfaction ([View MPC Demo](/mpc-demo/))
     * **Lane Keeping System**: Implemented bicycle model vehicle dynamics with kinematic constraints and steering/rate limits
@@ -25,7 +32,7 @@ Projects
       * Maintained real-time performance while ensuring safe trajectory generation around obstacles
     * Demonstrated receding horizon with real-time trajectory prediction and constraint handling across all three systems
 * **Path Planning Algorithms: Theory & Implementation**
-  * Implemented and analyzed multiple path planning algorithms: ([View Motion Planning Projects](/motion-planning/))
+  * Implemented and analyzed multiple path planning algorithms: ([View Motion Planning Blog](/motion-planning/))
     * Learning-Based Methods
       * Diffusion Policy
     * Safety-Constrained Control (Pending)
@@ -40,7 +47,7 @@ Projects
       * Dijkstra, A\*, Dynamic A\* (D\*)
   * Created detailed mathematical analyses and explanations for each algorithm, documenting theoretical foundations and practical implementations 
 * **Control Algorithms: Theory & Implementation**
-  * Implemented and analyzed fundamental control algorithms: ([View Controls Projects](/controls/))
+  * Implemented and analyzed fundamental control algorithms: ([View Controls Blog](/controls/))
     * Classical Control
       * Proportional-Integral-Derivative (PID) Control
     * State Estimation

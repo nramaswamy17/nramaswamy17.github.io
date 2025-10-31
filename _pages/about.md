@@ -10,15 +10,16 @@ redirect_from:
 
 I'm a Computer Science student passionate about understanding the fundamental principles that make intelligent systems work to drive benefit for humanity.
 
+## [Resume PDF](/files/NRamaswamy_Resume_100925.pdf)
 
-# Current [Projects](/projects/)
+## Current [Projects](/projects/)
 
-## Projects
+### Projects
 <!--- [Semi-truck AV](/posts/2025/10/semi-truck-av/) -->
 - [Autonomous Vehicle Model Predictive Control](/posts/2025/09/mpc-demo)
 - [Robot Arm Kinematics by # of Joints](/posts/2025/10/robot-arm-fk-ik/)
 
-## Blogs
+### Blogs
 - [Motion Blanning Blog](/motion-planning/)
 <!--- [Schoolwork Blog](/schoolwork/) -->
 
@@ -26,7 +27,7 @@ I'm a Computer Science student passionate about understanding the fundamental pr
 
 ------------------------------------------------------
 
-## My Path to AI
+## My Path
 
 My professional journey began at Tesla, where I spent several years working in **Facilities Engineering** and **Production Engineering**. During my time there, I gained valuable experience in:
 

@@ -24,6 +24,82 @@ Inverse Kinematics: How should I rotate my arm so that my system ends up at some
 
 View Code Repository: [Robot Arm Repository](https://github.com/nramaswamy17/C-Simulations/tree/main/ik_fk_review)
 
+# Triple Joint Robot Arm
+
+The triple joint robot arm is especially interesting:
+- A third joint (wrist) is introduced
+- Providing only an $$(x,y)$$ target will no longer be sufficient to fully constrain the output
+- The target is adjusted to $$(x, y, \phi)$$ 
+
+![Robot Arm Forward Kinematics](/post_data/robot-arm-fk-ik/robot-arm-3j.png)
+
+## Forward Kinematics
+
+### Equations
+Elbow Position:
+1. $$\theta _{elbow} = \theta _1$$
+2. $$elbow_x = L_1 * cos(\theta _{elbow})$$
+3. $$elbow_y = L_1 * sin(\theta _{elbow})$$
+
+Wrist Position:
+1. $$\theta _{wrist} = \theta _{elbow} + \theta _2$$
+2. $$wrist_x = elbow_x + L_2 * cos(\theta _{wrist})$$
+3. $$wrist_y = elbow_y + L_2 * sin(\theta _{wrist})$$
+
+End Effector Position / Orientation:
+1. $$\theta _{effector} = \theta _{wrist} + \theta _3$$
+1. $$end_x = wrist_x + L_2 * cos(\theta _{effector})$$
+2. $$end_y = wrist_y + L_2 * sin(\theta _{effector})$$
+
+## Inverse Kinematics
+
+Intuitively, we want to use our target $$\phi$$ and $$L_3$$ to figure out where the wrist needs to be. Then we use the wrist position as our $$(x,y)$$ target and run the same logic as the double joint.
+
+<video controls muted playsinline loop preload="metadata" poster="/post_data/robot-arm-fk-ik/robot-arm-3j-cover.png" src="/post_data/robot-arm-fk-ik/robot-arm-3j.mp4" data-src="/post_data/robot-arm-fk-ik/robot-arm-3j.mp4"></video>
+
+<script>
+  const v = document.querySelector('video[data-src]');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        if (!v.src) v.src = v.dataset.src;            // start loading
+        v.play().catch(()=>{});                       // play if allowed
+      } else {
+        v.pause();
+      }
+    });
+  }, {threshold: 0.5});
+  io.observe(v);
+</script>
+
+### Equations
+
+Calculate where the wrist position should be:
+- $$x_{wrist} = x_{target} - L_3 * cos(\phi)$$
+- $$y_{wrist} = y_{target} - L_3 * sin(\phi)$$ 
+
+Define $$\theta _3$$ as relative to the current orientation but derived from phi
+- $$\theta _3 = \phi - \theta _1 - \theta _2$$
+
+Use $$(x_{wrist}, y_{wrist})$$ instead of $$(x,y)$$ and copy the Double Joint Robot Inverse Kinematics Solution.
+
+### Double Joint IK Solution
+
+Given a target position $$(x_{wrist},y_{wrist})$$:
+
+$$\theta_2 = \arccos\left(\frac{d^2 - L_1^2 - L_2^2}{2L_1L_2}\right)$$
+
+$$\theta_1 = \text{atan2}(y_{wrist},x_{wrist}) - \text{atan2}(k_2, k_1)$$
+
+where:
+
+$$k_1 = L_1 + L_2\cos(\theta_2)$$
+
+$$k_2 = L_2\sin(\theta_2)$$
+
+$$d = \sqrt{x_{wrist}^2 + y_{wrist}^2}$$
+
+
 # Double Joint Robot Arm
 
 Two joints are defined, where rotatation for both is along the same axis. 
@@ -34,7 +110,6 @@ The Forward Kinematics are super straightforward, though the Inverse Kinematics 
 
 ## Forward Kinematics
 
-
 ### Equations
 Elbow Position:
 1. $$elbow_x = L_1 * cos(\theta _1)$$
@@ -42,7 +117,7 @@ Elbow Position:
 
 End Effector Position:
 1. $$end_x = elbow_x + L_2 * cos(\theta _1 + \theta _2)$$
-1. $$end_y = elbow_y + L_2 * sin(\theta _1 + \theta _2)$$
+2. $$end_y = elbow_y + L_2 * sin(\theta _1 + \theta _2)$$
 
 ## Inverse Kinematics
 

@@ -12,14 +12,14 @@ author_profile: true
 Projects
 ======
 * **Robotic Arm 2D Simulation**
-  * Developed a 2D robotic arm simulation environment with forward and inverse kinematics ([View Robot Arm Demo](/robot-arm-ik-fk/))
+  * Developed a 2D robotic arm simulation environment with forward and inverse kinematics
     * Implemented forward kinematics calculations for multi-joint robotic arm visualization
     * Created inverse kinematics solver to determine joint angles for desired end-effector positions
     * Built interactive visualization allowing real-time manipulation and position control
     * Demonstrated practical applications of robotics fundamentals through interactive examples
 
 * **MPC Driver Assist for Autonomous Vehicles**
-  * Developed Model Predictive Control systems for autonomous vehicle applications with real-time optimization and constraint satisfaction ([View MPC Demo](/mpc-demo/))
+  * Developed Model Predictive Control systems for autonomous vehicle applications with real-time optimization and constraint satisfaction 
     * **Lane Keeping System**: Implemented bicycle model vehicle dynamics with kinematic constraints and steering/rate limits
       * Designed quadratic cost function balancing lateral error, heading deviation, control effort, and smoothness
       * Achieved sub-1ms solve times for 15-step prediction horizon using grid search optimization (41 steering options)
@@ -32,7 +32,7 @@ Projects
       * Maintained real-time performance while ensuring safe trajectory generation around obstacles
     * Demonstrated receding horizon with real-time trajectory prediction and constraint handling across all three systems
 * **Path Planning Algorithms: Theory & Implementation**
-  * Implemented and analyzed multiple path planning algorithms: ([View Motion Planning Blog](/motion-planning/))
+  * Implemented and analyzed multiple path planning algorithms (on paper)
     * Learning-Based Methods
       * Diffusion Policy
     * Safety-Constrained Control (Pending)
@@ -47,7 +47,7 @@ Projects
       * Dijkstra, A\*, Dynamic A\* (D\*)
   * Created detailed mathematical analyses and explanations for each algorithm, documenting theoretical foundations and practical implementations 
 * **Control Algorithms: Theory & Implementation**
-  * Implemented and analyzed fundamental control algorithms: ([View Controls Blog](/controls/))
+  * Implemented and analyzed fundamental control algorithms (on paper)
     * Classical Control
       * Proportional-Integral-Derivative (PID) Control
     * State Estimation
